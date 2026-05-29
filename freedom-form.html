@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Church | Freedom Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Love Church tokens ─────────────────────────────────────── */
+  :root {
+    --lc-ink:        #151515;
+    --lc-cream:      #EEE4D3;
+    --lc-paper:      #F3F1E5;
+    --lc-taupe:      #B5A090;
+    --lc-taupe-deep: #A39584;
+    --lc-pink:       #F0238D;
+    --lc-pink-soft:  #F49DC3;
+    --lc-gold:       #C9A24A;
+
+    --lc-font-display: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --lc-font-accent:  "EB Garamond", "Garamond", Georgia, serif;
+
+    --dur-base: 240ms;
+    --dur-slow: 400ms;
+    --ease-std: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--lc-cream);
+    color: var(--lc-ink);
+    font-family: var(--lc-font-display);
+    overflow: hidden;
+  }
+
+  /* ── Progress bar ───────────────────────────────────────────── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--lc-pink);
+    transition: width var(--dur-slow) var(--ease-std);
+    z-index: 200;
+  }
+
+  #progress-label {
+    position: fixed;
+    top: 16px; right: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    z-index: 200;
+    font-family: var(--lc-font-display);
+  }
+
+  /* ── Screen transitions ─────────────────────────────────────── */
+  .screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px 90px;
+    opacity: 0;
+    transform: translateY(32px);
+    pointer-events: none;
+    transition: opacity var(--dur-slow) var(--ease-std),
+                transform var(--dur-slow) var(--ease-std);
+  }
+  .screen.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  .screen.exit-up {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+
+  /* ── Layout ─────────────────────────────────────────────────── */
+  .q-box {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  /* Section pill label */
+  .section-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lc-pink);
+    border: 1.5px solid var(--lc-pink);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  /* Question counter */
+  .q-counter {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    margin-bottom: 10px;
+  }
+  .q-counter span { color: var(--lc-pink); }
+
+  /* Question text */
+  .q-text {
+    font-size: clamp(22px, 3.8vw, 30px);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--lc-ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .q-text em {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--lc-ink);
+  }
+  .q-sub {
+    font-size: 14px;
+    color: var(--lc-taupe-deep);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* Optional badge */
+  .opt-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    background: rgba(0,0,0,0.06);
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-left: 10px;
+    vertical-align: middle;
+    font-family: var(--lc-font-display);
+  }
+
+  /* ── Inputs ─────────────────────────────────────────────────── */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--lc-taupe);
+    color: var(--lc-ink);
+    font-size: 20px;
+    font-family: var(--lc-font-display);
+    font-weight: 400;
+    padding: 10px 2px;
+    outline: none;
+    transition: border-color var(--dur-base);
+    caret-color: var(--lc-pink);
+    margin-top: 4px;
+  }
+  input:focus, textarea:focus {
+    border-bottom-color: var(--lc-pink);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--lc-taupe);
+    font-size: 18px;
+    font-style: italic;
+    font-family: var(--lc-font-accent);
+  }
+  textarea {
+    resize: none;
+    min-height: 90px;
+    line-height: 1.6;
+    padding-bottom: 8px;
+  }
+  input[type="date"] { cursor: pointer; }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+
+  /* ── Radio / choice buttons ─────────────────────────────────── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .choice-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--lc-taupe);
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--lc-paper);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--lc-ink);
+    transition: border-color var(--dur-base), background var(--dur-base);
+    user-select: none;
+  }
+  .choice-btn:hover {
+    border-color: var(--lc-pink);
+    background: #fff;
+  }
+  .choice-btn.selected {
+    border-color: var(--lc-pink);
+    background: rgba(240, 35, 141, 0.06);
+  }
+  .choice-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border: 1.5px solid var(--lc-taupe);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--lc-taupe);
+    flex-shrink: 0;
+    letter-spacing: 0;
+    transition: background var(--dur-base), border-color var(--dur-base), color var(--dur-base);
+  }
+  .choice-btn.selected .choice-key {
+    background: var(--lc-pink);
+    border-color: var(--lc-pink);
+    color: #fff;
+  }
+
+  /* ── Checkbox (consent) ─────────────────────────────────────── */
+  .consent-list { margin-top: 8px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(181,160,144,0.3);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--lc-ink);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--lc-pink);
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+
+  /* ── Navigation ─────────────────────────────────────────────── */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+  }
+  .btn-next {
+    background: var(--lc-pink);
+    color: #fff;
+    border: none;
+    padding: 13px 28px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: var(--lc-font-display);
+    transition: background var(--dur-base), transform 80ms;
+  }
+  .btn-next:hover { background: #d01070; }
+  .btn-next:active { transform: scale(0.98); }
+
+  .btn-back {
+    background: transparent;
+    border: 1.5px solid var(--lc-taupe);
+    color: var(--lc-taupe-deep);
+    padding: 12px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: var(--lc-font-display);
+    transition: border-color var(--dur-base), color var(--dur-base);
+  }
+  .btn-back:hover { border-color: var(--lc-ink); color: var(--lc-ink); }
+
+  .skip-link {
+    background: none; border: none;
+    color: var(--lc-taupe);
+    font-size: 13px;
+    font-family: var(--lc-font-display);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0 4px;
+  }
+  .skip-link:hover { color: var(--lc-ink); }
+
+  .enter-hint {
+    font-size: 12px;
+    color: var(--lc-taupe);
+    margin-left: 2px;
+  }
+
+  /* ── Welcome screen ─────────────────────────────────────────── */
+  .center-screen {
+    text-align: center;
+    flex-direction: column;
+    background: var(--lc-cream);
+  }
+  .lc-wordmark {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    margin-bottom: 40px;
+  }
+  /* "L©" badge approximation */
+  .lc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; height: 48px;
+    background: var(--lc-ink);
+    color: var(--lc-cream);
+    font-size: 18px;
+    font-weight: 900;
+    border-radius: 50%;
+    margin: 0 auto 28px;
+    letter-spacing: -0.02em;
+  }
+  .welcome-title {
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .welcome-title em {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+  }
+  .welcome-sub {
+    font-size: 16px;
+    color: var(--lc-taupe-deep);
+    max-width: 440px;
+    margin: 16px auto 36px;
+    line-height: 1.7;
+  }
+  .welcome-meta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    margin-top: 18px;
+  }
+
+  /* ── Section transition screen ──────────────────────────────── */
+  .section-num-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lc-pink);
+    margin-bottom: 14px;
+  }
+  .section-headline {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-headline em {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .section-desc {
+    font-size: 15px;
+    color: var(--lc-taupe-deep);
+    max-width: 420px;
+    line-height: 1.7;
+    margin: 0 auto 32px;
+  }
+
+  /* ── Thank you ──────────────────────────────────────────────── */
+  .ty-rule {
+    width: 48px;
+    height: 3px;
+    background: var(--lc-pink);
+    margin: 0 auto 32px;
+    border-radius: 2px;
+  }
+  .ty-title {
+    font-size: clamp(30px, 5.5vw, 46px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .ty-title em {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+  }
+  .ty-body {
+    font-size: 16px;
+    color: var(--lc-taupe-deep);
+    max-width: 440px;
+    margin: 0 auto 36px;
+    line-height: 1.75;
+  }
+
+  /* ── Keyboard hint ──────────────────────────────────────────── */
+  #keyboard-hint {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--lc-taupe);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .key {
+    background: rgba(0,0,0,0.07);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Divider line ───────────────────────────────────────────── */
+  .pink-rule {
+    width: 36px;
+    height: 3px;
+    background: var(--lc-pink);
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 480px) {
+    .screen { padding: 80px 16px 48px; align-items: flex-start; }
+    .welcome-title { font-size: 36px; }
+    .section-headline { font-size: 28px; }
+  }
+
+  /* ── Section milestone map ──────────────────────────────────── */
+  #section-map {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 68px;
+    background: var(--lc-paper);
+    border-top: 1px solid rgba(181,160,144,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    z-index: 150;
+    transition: opacity var(--dur-slow);
+  }
+  #section-map.hidden { opacity: 0; pointer-events: none; }
+
+  .map-track {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .map-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    position: relative;
+    cursor: default;
+  }
+  .map-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--lc-taupe);
+    background: transparent;
+    transition: all var(--dur-base) var(--ease-std);
+    position: relative;
+  }
+  .map-node.completed .map-dot {
+    background: var(--lc-pink);
+    border-color: var(--lc-pink);
+    width: 10px; height: 10px;
+  }
+  .map-node.current .map-dot {
+    background: var(--lc-pink);
+    border-color: var(--lc-pink);
+    width: 14px; height: 14px;
+    box-shadow: 0 0 0 4px rgba(240,35,141,0.18);
+  }
+  .map-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--lc-taupe);
+    white-space: nowrap;
+    transition: color var(--dur-base);
+    font-family: var(--lc-font-display);
+  }
+  .map-node.completed .map-label,
+  .map-node.current .map-label {
+    color: var(--lc-ink);
+  }
+  .map-node.current .map-label {
+    color: var(--lc-pink);
+  }
+
+  .map-line {
+    flex: 1;
+    height: 2px;
+    background: var(--lc-taupe);
+    opacity: 0.4;
+    margin-bottom: 14px; /* aligns with dot center above label */
+    transition: background var(--dur-base), opacity var(--dur-base);
+    min-width: 8px;
+  }
+  .map-line.filled {
+    background: var(--lc-pink);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 600px) {
+    .map-label { display: none; }
+    #section-map { height: 48px; }
+    .map-dot { width: 8px; height: 8px; }
+    .map-node.current .map-dot { width: 12px; height: 12px; }
+    .map-node { gap: 0; }
+    .map-line { margin-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:0%"></div>
+<div id="progress-label"></div>
+<div id="app"></div>
+
+<!-- Section milestone map -->
+<div id="section-map" class="hidden">
+  <div class="map-track" id="map-track"></div>
+</div>
+
+<script>
+// ── STEPS ──────────────────────────────────────────────────────────────────
+const STEPS = [
+  // 0 — Welcome
+  { type: 'welcome' },
+
+  // Section 1: Personal Info
+  { type: 'section', num: 'Section 1 of 8', title: 'Personal<br><em>Information</em>', desc: 'Let\'s start with a few basics so we know how to reach you.' },
+  { type: 'text',    id: 'name',       section: 'Personal Info', q: 'What is your full name?', placeholder: 'First & Last Name', required: true },
+  { type: 'tel',     id: 'phone',      section: 'Personal Info', q: 'What is your phone number?', placeholder: '(555) 000-0000', required: true },
+  { type: 'email',   id: 'email',      section: 'Personal Info', q: 'What is your email address?', placeholder: 'you@example.com', required: true },
+  { type: 'text',    id: 'address',    section: 'Personal Info', q: 'What is your home address?', placeholder: 'Street, City, State, ZIP' },
+  { type: 'date',    id: 'dob',        section: 'Personal Info', q: 'What is your date of birth?' },
+  { type: 'radio',   id: 'gender',     section: 'Personal Info', q: 'What is your gender?', options: ['Male', 'Female'] },
+  { type: 'radio',   id: 'marital',    section: 'Personal Info', q: 'What is your marital status?', options: ['Single', 'Married', 'Divorced', 'Widowed', 'Separated'] },
+  { type: 'text',    id: 'spouse',     section: 'Personal Info', q: 'What is your spouse\'s name?', placeholder: 'Spouse\'s name', optional: true, showIf: r => r.marital === 'Married' },
+  { type: 'text',    id: 'children',   section: 'Personal Info', q: 'List your children\'s names and ages.', placeholder: 'e.g. Emma (8), Caleb (5)', optional: true },
+  { type: 'text',    id: 'campus',     section: 'Personal Info', q: 'Which Love Church campus do you attend?', placeholder: 'Primary campus' },
+  { type: 'text',    id: 'best_time',  section: 'Personal Info', q: 'What\'s the best time to meet with you?', placeholder: 'e.g. Weekday evenings, Saturday mornings' },
+
+  // Section 2: Spiritual Background
+  { type: 'section', num: 'Section 2 of 8', title: 'Spiritual<br><em>Background</em>', desc: 'Help us understand where you are in your walk with God.' },
+  { type: 'radio',   id: 'born_again',     section: 'Spiritual Background', q: 'Are you a born-again Christian?', options: ['Yes', 'No', 'Not sure'] },
+  { type: 'textarea', id: 'salvation',     section: 'Spiritual Background', q: 'When and where did you surrender your life to Jesus?', placeholder: 'Share as much or as little as you\'d like...', optional: true },
+  { type: 'radio',   id: 'water_baptized', section: 'Spiritual Background', q: 'Have you been water baptized?', options: ['Yes', 'No', 'Not yet'] },
+  { type: 'radio',   id: 'hs_baptized',    section: 'Spiritual Background', q: 'Have you been baptized in the Holy Spirit?', options: ['Yes', 'No', 'Not sure what that means'] },
+  { type: 'textarea', id: 'hs_meaning',    section: 'Spiritual Background', q: 'What does the Holy Spirit mean to you?', placeholder: 'In your own words...', optional: true },
+  { type: 'radio',   id: 'attends_church', section: 'Spiritual Background', q: 'Do you regularly attend church?', options: ['Yes', 'No', 'Sometimes'] },
+  { type: 'text',    id: 'other_church',   section: 'Spiritual Background', q: 'If you attend another church, which one?', placeholder: 'Church name', optional: true, showIf: r => r.attends_church === 'Yes' },
+  { type: 'text',    id: 'how_long_lc',    section: 'Spiritual Background', q: 'How long have you attended Love Church?', placeholder: 'e.g. 6 months, 2 years, just started' },
+  { type: 'text',    id: 'how_heard',      section: 'Spiritual Background', q: 'How did you first hear about Love Church?', placeholder: 'Friend, social media, etc.' },
+  { type: 'radio',   id: 'small_group',    section: 'Spiritual Background', q: 'Are you currently in a small group?', options: ['Yes', 'No', 'Looking for one'] },
+  { type: 'radio',   id: 'discipleship',   section: 'Spiritual Background', q: 'Have you been through discipleship before?', options: ['Yes', 'No', 'Currently in discipleship'] },
+
+  // Section 3: Volunteer & Leadership
+  { type: 'section', num: 'Section 3 of 8', title: 'Volunteer &amp;<br><em>Leadership</em>', desc: 'Tell us how you\'d like to serve.' },
+  { type: 'text',    id: 'serve_team',     section: 'Volunteer & Leadership', q: 'Which serve team interests you?', placeholder: 'e.g. Worship, Kids, Media, Hospitality' },
+  { type: 'textarea', id: 'why_serve',     section: 'Volunteer & Leadership', q: 'Why do you want to serve?', placeholder: 'What\'s stirring in your heart...' },
+  { type: 'textarea', id: 'gifts',         section: 'Volunteer & Leadership', q: 'What gifts or talents has God given you?', placeholder: 'Natural and spiritual gifts...' },
+  { type: 'textarea', id: 'passion',       section: 'Volunteer & Leadership', q: 'What are you passionate about?', placeholder: 'What breaks your heart or lights you up...' },
+  { type: 'text',    id: 'occupation',     section: 'Volunteer & Leadership', q: 'What do you do for work?', placeholder: 'Job title or field', optional: true },
+  { type: 'radio',   id: 'essentials',     section: 'Volunteer & Leadership', q: 'Have you completed Essentials?', options: ['Yes', 'No', 'Currently going through it'] },
+  { type: 'radio',   id: 'rotation',       section: 'Volunteer & Leadership', q: 'Which serve rotation do you prefer?', options: ['Every week', 'Every other week', 'Once a month', 'As needed'] },
+
+  // Section 4: Spiritual Growth
+  { type: 'section', num: 'Section 4 of 8', title: 'Spiritual Growth &amp;<br><em>Daily Walk</em>', desc: 'Take a moment to reflect on where you are with the Lord.' },
+  { type: 'textarea', id: 'lord_rel',       section: 'Spiritual Growth', q: 'Describe your current relationship with the Lord.', placeholder: 'Be honest — this is a safe place...' },
+  { type: 'textarea', id: 'prayer_life',    section: 'Spiritual Growth', q: 'What does your prayer life look like?', placeholder: 'Frequency, depth, struggles, joys...' },
+  { type: 'textarea', id: 'god_teaching',   section: 'Spiritual Growth', q: 'What has God been teaching you recently?', placeholder: 'Any scripture, word, or season of growth...' },
+  { type: 'textarea', id: 'called_higher',  section: 'Spiritual Growth', q: 'In this season, where is God calling you higher?', placeholder: 'Obedience, surrender, faith, character...' },
+  { type: 'textarea', id: 'spiritually_stuck', section: 'Spiritual Growth', q: 'Are there areas where you feel stuck spiritually?', placeholder: 'It\'s okay to be real here...', optional: true },
+  { type: 'textarea', id: 'support_needed', section: 'Spiritual Growth', q: 'Are there struggles where you\'d like support, accountability, healing, or prayer?', placeholder: 'Share what you\'re comfortable sharing...', optional: true },
+
+  // Section 5: Relational & Emotional Health
+  { type: 'section', num: 'Section 5 of 8', title: 'Relational &amp;<br><em>Emotional Health</em>', desc: 'Our whole person matters to God — relationships, emotions, and all.' },
+  { type: 'textarea', id: 'family_rel',     section: 'Relational & Emotional', q: 'Describe your relationship with your family, spouse, or children.', placeholder: 'Strengths, tensions, dynamics...', optional: true },
+  { type: 'radio',   id: 'trauma',          section: 'Relational & Emotional', q: 'Have you experienced significant trauma, grief, rejection, abuse, or abandonment?', options: ['Yes', 'No', 'Prefer not to answer'] },
+  { type: 'radio',   id: 'mental_struggle', section: 'Relational & Emotional', q: 'Have you struggled with anxiety, depression, fear, shame, guilt, anger, or hopelessness?', options: ['Yes', 'No', 'Sometimes', 'Prefer not to answer'] },
+  { type: 'radio',   id: 'forgiveness',     section: 'Relational & Emotional', q: 'Do you have difficulty forgiving others or trusting people?', options: ['Yes', 'No', 'Sometimes'] },
+  { type: 'radio',   id: 'major_loss',      section: 'Relational & Emotional', q: 'Have there been major losses, divorces, or painful life transitions?', options: ['Yes', 'No', 'Prefer not to answer'] },
+  { type: 'radio',   id: 'community_feel',  section: 'Relational & Emotional', q: 'Do you currently feel supported and connected in community?', options: ['Yes', 'No', 'Somewhat'] },
+
+  // Section 6: Healing & Freedom
+  { type: 'section', num: 'Section 6 of 8', title: 'Healing &amp;<br><em>Freedom Ministry</em>', desc: 'This section is entirely optional. It\'s for those who desire healing prayer or freedom ministry. You may skip it.', optional: true },
+  { type: 'radio',   id: 'wants_freedom',   section: 'Healing & Freedom', q: 'Do you desire healing prayer or freedom ministry support?', options: ['Yes, I do', 'No, skip this section'], sub: 'This section is confidential and handled with care by trained ministry leaders.' },
+  { type: 'radio',   id: 'rep_patterns',    section: 'Healing & Freedom', q: 'Have you experienced repetitive patterns of sin, fear, torment, addiction, or oppression?', options: ['Yes', 'No', 'Prefer not to answer'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'nightmares',      section: 'Healing & Freedom', q: 'Have you experienced nightmares, panic attacks, overwhelming fear, or spiritual heaviness?', options: ['Yes', 'No', 'Sometimes'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'occult',          section: 'Healing & Freedom', q: 'Have you participated in occult practices, witchcraft, New Age, tarot, Ouija, etc.?', options: ['Yes', 'No', 'Prefer not to answer'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'sexual_trauma',   section: 'Healing & Freedom', q: 'Have you experienced sexual trauma, abuse, or unhealthy soul ties?', options: ['Yes', 'No', 'Prefer not to answer'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'destructive',     section: 'Healing & Freedom', q: 'Have you struggled with pornography, addiction, self-harm, suicidal thoughts, or destructive patterns?', options: ['Yes', 'No', 'Prefer not to answer'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'generational',    section: 'Healing & Freedom', q: 'Are there generational patterns in your family involving addiction, abuse, occult, anger, adultery, or mental illness?', options: ['Yes', 'No', 'Not sure'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'radio',   id: 'needs_freedom',   section: 'Healing & Freedom', q: 'Do you sense areas where you need healing, deliverance, forgiveness, or freedom?', options: ['Yes', 'No', 'Not sure'], showIf: r => r.wants_freedom !== 'No, skip this section' },
+  { type: 'textarea', id: 'prayer_request', section: 'Healing & Freedom', q: 'Is there anything specific you\'d like prayer for?', placeholder: 'Share what\'s on your heart...', optional: true, showIf: r => r.wants_freedom !== 'No, skip this section' },
+
+  // Section 7: Health & Wellness
+  { type: 'section', num: 'Section 7 of 8', title: 'Health &amp;<br><em>Wellness</em>', desc: 'This helps our care team serve you well and with wisdom.' },
+  { type: 'radio',   id: 'diagnosed',       section: 'Health & Wellness', q: 'Do you have any diagnosed medical or mental health conditions?', options: ['Yes', 'No', 'Prefer not to answer'] },
+  { type: 'radio',   id: 'counseling',      section: 'Health & Wellness', q: 'Are you currently receiving counseling, therapy, or medical care?', options: ['Yes', 'No'] },
+  { type: 'radio',   id: 'health_struggle', section: 'Health & Wellness', q: 'Do you struggle with sleep disorders, eating disorders, panic attacks, or chronic pain?', options: ['Yes', 'No', 'Sometimes'] },
+  { type: 'textarea', id: 'meds',           section: 'Health & Wellness', q: 'Are there medications or health concerns our care team should know about?', placeholder: 'Only share what you feel comfortable sharing...', optional: true },
+
+  // Section 8: Consent
+  { type: 'section', num: 'Section 8 of 8', title: 'Consent &amp;<br><em>Confidentiality</em>', desc: 'Almost done. Please review and agree before submitting.' },
+  { type: 'consent', id: 'consent', section: 'Consent', q: 'Please confirm the following:', items: [
+    'I understand this form is for pastoral care, discipleship, healing prayer, and ministry support.',
+    'I understand Love Church is not providing licensed medical or psychiatric treatment.',
+    'I understand all information will remain confidential within appropriate ministry leadership.',
+    'I voluntarily request prayer, care, discipleship, healing ministry, and/or freedom ministry.'
+  ]},
+
+  // Thank you
+  { type: 'thankyou' }
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let currentStep = 0;
+let responses = {};
+const totalQs = STEPS.filter(s => !['welcome','section','thankyou'].includes(s.type)).length;
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function letter(i) { return String.fromCharCode(65 + i); }
+function isVisible(s) { return !s.showIf || s.showIf(responses); }
+function qNum(idx) {
+  let n = 0;
+  for (let i = 0; i <= idx; i++) {
+    if (STEPS[i] && !['welcome','section','thankyou'].includes(STEPS[i].type)) n++;
+  }
+  return n;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render(idx) {
+  const step = STEPS[idx];
+  const app = document.getElementById('app');
+  const old = app.querySelector('.screen.active');
+  if (old) { old.classList.add('exit-up'); old.classList.remove('active'); setTimeout(() => old.remove(), 420); }
+
+  const div = document.createElement('div');
+  div.className = 'screen';
+  div.id = 'scr-' + idx;
+
+  if (step.type === 'welcome') {
+    div.classList.add('center-screen');
+    div.innerHTML = `
+      <div style="max-width:520px; margin:0 auto;">
+        <div class="lc-badge">LC</div>
+        <div class="lc-wordmark">Love Church</div>
+        <h1 class="welcome-title">Freedom<br><em>Form</em></h1>
+        <p class="welcome-sub">
+          This form helps our pastoral care, healing, and freedom ministry teams serve you well.
+          All information is confidential and only shared with appropriate ministry leaders.
+        </p>
+        <div style="background:rgba(240,35,141,0.07); border-left:3px solid var(--lc-pink); border-radius:0 6px 6px 0; padding:14px 18px; margin-bottom:28px; text-align:left;">
+          <p style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--lc-pink); margin-bottom:6px;">A note before you begin</p>
+          <p style="font-size:14px; line-height:1.7; color:var(--lc-taupe-deep);">Take your time with each question. The more honest and thorough you are, the better we can care for you and point you toward the right next step. There are no wrong answers here.</p>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;">
+          <button class="btn-next" onclick="advance()" style="font-size:13px; padding:16px 44px;">
+            Let's Begin
+          </button>
+          <span style="font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--lc-taupe);">~15–20 min</span>
+        </div>
+        <p class="welcome-meta" style="margin-top:16px;">🔒 Confidential &nbsp;·&nbsp; Shared only with pastoral leadership</p>
+      </div>`;
+  }
+
+  else if (step.type === 'section') {
+    div.classList.add('center-screen');
+    div.innerHTML = `
+      <div style="max-width:480px; margin:0 auto; text-align:center;">
+        <div class="pink-rule" style="margin:0 auto 20px;"></div>
+        <div class="section-num-label">${step.num}</div>
+        <h2 class="section-headline">${step.title}</h2>
+        <p class="section-desc">${step.desc}</p>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; align-items:center;">
+          <button class="btn-next" onclick="advance()">Continue</button>
+          ${currentStep > 0 ? '<button class="btn-back" onclick="goBack()">Back</button>' : ''}
+          ${step.optional ? '<button class="skip-link" onclick="skipSection()">Skip this section</button>' : ''}
+        </div>
+      </div>`;
+  }
+
+  else if (step.type === 'thankyou') {
+    div.classList.add('center-screen');
+    div.innerHTML = `
+      <div style="max-width:480px; margin:0 auto; text-align:center;">
+        <div class="ty-rule"></div>
+        <h2 class="ty-title">Thank<br><em>You</em></h2>
+        <p class="ty-body">
+          Your form has been received. A Love Church pastor or ministry leader will reach out to you personally soon.<br><br>
+          You are known. You are loved. You are not alone.
+        </p>
+        <button class="btn-next" onclick="window.print()">Print / Save a Copy</button>
+      </div>`;
+    document.getElementById('keyboard-hint').style.display = 'none';
+  }
+
+  else {
+    const n = qNum(idx);
+    const opt = step.optional;
+    let input = '';
+
+    if (['text','tel','email'].includes(step.type)) {
+      const v = responses[step.id] || '';
+      input = `<input type="${step.type}" id="inp-${step.id}" placeholder="${step.placeholder||''}" value="${v}" autocomplete="off" spellcheck="false">`;
+    }
+    else if (step.type === 'date') {
+      const v = responses[step.id] || '';
+      input = `<input type="date" id="inp-${step.id}" value="${v}">`;
+    }
+    else if (step.type === 'textarea') {
+      const v = responses[step.id] || '';
+      input = `<textarea id="inp-${step.id}" placeholder="${step.placeholder||''}" rows="3">${v}</textarea>`;
+    }
+    else if (step.type === 'radio') {
+      const cur = responses[step.id] || '';
+      input = `<div class="choices">` + step.options.map((o, i) =>
+        `<div class="choice-btn${cur===o?' selected':''}" onclick="pick('${step.id}','${o.replace(/'/g,"\\'")}',${idx})" data-v="${o}">
+          <span class="choice-key">${letter(i)}</span>${o}
+        </div>`
+      ).join('') + `</div>`;
+    }
+    else if (step.type === 'consent') {
+      const cur = responses[step.id] || [];
+      input = `<div class="consent-list">` + step.items.map((item, i) =>
+        `<label class="check-item">
+          <input type="checkbox" value="${i}" ${cur.includes(i)?'checked':''} onchange="saveConsent(${idx})">
+          <span>${item}</span>
+        </label>`
+      ).join('') + `</div>`;
+    }
+
+    div.innerHTML = `
+      <div class="q-box">
+        <div class="section-pill">${step.section}</div>
+        <div class="q-counter"><span>${n}</span> / ${totalQs}</div>
+        <h2 class="q-text">${step.q}${opt ? '<span class="opt-badge">Optional</span>' : ''}</h2>
+        ${step.sub ? `<p class="q-sub">${step.sub}</p>` : ''}
+        ${input}
+        <div class="nav-row">
+          <button class="btn-next" onclick="advance()">
+            ${step.type === 'consent' ? 'Submit ✓' : 'OK'}
+          </button>
+          ${currentStep > 1 ? '<button class="btn-back" onclick="goBack()">Back</button>' : ''}
+          ${opt ? '<button class="skip-link" onclick="advance(true)">Skip</button>' : ''}
+          ${!['radio','consent'].includes(step.type) ? '<span class="enter-hint">or Enter ↵</span>' : ''}
+        </div>
+      </div>`;
+
+    setTimeout(() => {
+      const inp = div.querySelector('input[type="text"],input[type="email"],input[type="tel"],input[type="date"],textarea');
+      if (inp) {
+        inp.focus();
+        if (step.type !== 'textarea') {
+          inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); advance(); } });
+        } else {
+          inp.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); advance(); } });
+        }
+      }
+    }, 60);
+  }
+
+  app.appendChild(div);
+  requestAnimationFrame(() => requestAnimationFrame(() => div.classList.add('active')));
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = Math.round((currentStep / (STEPS.length - 1)) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  const s = STEPS[currentStep];
+  document.getElementById('progress-label').textContent =
+    !['welcome','section','thankyou'].includes(s?.type) ? `${qNum(currentStep)} / ${totalQs}` : '';
+  updateSectionMap();
+}
+
+// ── ACTIONS ────────────────────────────────────────────────────────────────
+function pick(id, val, stepIdx) {
+  responses[id] = val;
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.toggle('selected', b.dataset.v === val));
+  setTimeout(() => {
+    const step = STEPS[stepIdx];
+    if (step?.skipIfNo && val === step.skipIfNo) { skipFreedom(); return; }
+    if (id === 'wants_freedom' && val === 'No, skip this section') { skipFreedom(); return; }
+    advance();
+  }, 300);
+}
+
+function saveConsent() {
+  const checked = [];
+  document.querySelectorAll('.consent-list input[type="checkbox"]:checked').forEach(c => checked.push(parseInt(c.value)));
+  responses['consent'] = checked;
+}
+
+function saveInput() {
+  const s = STEPS[currentStep];
+  if (!s) return;
+  if (['text','tel','email','date'].includes(s.type)) {
+    const el = document.getElementById('inp-' + s.id);
+    if (el) responses[s.id] = el.value.trim();
+  }
+  if (s.type === 'textarea') {
+    const el = document.getElementById('inp-' + s.id);
+    if (el) responses[s.id] = el.value.trim();
+  }
+}
+
+function advance(skip = false) {
+  saveInput();
+  const s = STEPS[currentStep];
+  if (!skip && s?.required && !responses[s.id]) {
+    const el = document.getElementById('inp-' + s.id);
+    if (el) { el.style.borderBottomColor = '#e74c3c'; el.focus(); setTimeout(() => el.style.borderBottomColor = '', 1400); }
+    return;
+  }
+  let next = currentStep + 1;
+  while (next < STEPS.length - 1 && STEPS[next].type !== 'section' && STEPS[next].type !== 'thankyou' && !isVisible(STEPS[next])) next++;
+  if (next >= STEPS.length) return;
+  currentStep = next;
+  render(currentStep);
+}
+
+function goBack() {
+  let prev = currentStep - 1;
+  while (prev > 0 && !isVisible(STEPS[prev]) && STEPS[prev].type !== 'section') prev--;
+  currentStep = Math.max(0, prev);
+  render(currentStep);
+}
+
+function skipSection() {
+  let next = currentStep + 1;
+  while (next < STEPS.length && STEPS[next].type !== 'section' && STEPS[next].type !== 'thankyou') next++;
+  currentStep = next;
+  render(currentStep);
+}
+
+function skipFreedom() {
+  let next = currentStep + 1;
+  while (next < STEPS.length) {
+    if (STEPS[next].type === 'section' && STEPS[next].title?.includes('Health')) break;
+    if (STEPS[next].type === 'section' && !STEPS[next].title?.includes('Freedom')) break;
+    next++;
+  }
+  currentStep = next;
+  render(currentStep);
+}
+
+// ── SECTION MAP ────────────────────────────────────────────────────────────
+const MAP_SECTIONS = [
+  'Personal', 'Spiritual', 'Volunteer', 'Growth',
+  'Relational', 'Freedom', 'Wellness', 'Consent'
+];
+
+function getCurrentSection() {
+  // Returns 0–7 for each section, -1 for welcome, 8 for thankyou
+  if (STEPS[currentStep]?.type === 'thankyou') return 8;
+  let sec = -1;
+  for (let i = 0; i <= currentStep; i++) {
+    if (STEPS[i]?.type === 'section') sec++;
+  }
+  return sec;
+}
+
+function buildSectionMap() {
+  const track = document.getElementById('map-track');
+  track.innerHTML = '';
+  MAP_SECTIONS.forEach((label, i) => {
+    const node = document.createElement('div');
+    node.className = 'map-node';
+    node.id = 'map-node-' + i;
+    node.innerHTML = `<div class="map-dot"></div><span class="map-label">${label}</span>`;
+    track.appendChild(node);
+    if (i < MAP_SECTIONS.length - 1) {
+      const line = document.createElement('div');
+      line.className = 'map-line';
+      line.id = 'map-line-' + i;
+      track.appendChild(line);
+    }
+  });
+}
+
+function updateSectionMap() {
+  const s = STEPS[currentStep];
+  const mapEl = document.getElementById('section-map');
+  if (!mapEl) return;
+
+  // Hide on welcome and thankyou
+  if (s?.type === 'welcome' || s?.type === 'thankyou') {
+    mapEl.classList.add('hidden');
+    return;
+  }
+  mapEl.classList.remove('hidden');
+
+  const cur = getCurrentSection();
+
+  MAP_SECTIONS.forEach((_, i) => {
+    const node = document.getElementById('map-node-' + i);
+    const line = document.getElementById('map-line-' + i);
+    if (!node) return;
+    node.classList.remove('current', 'completed');
+    if (i < cur) node.classList.add('completed');
+    else if (i === cur) node.classList.add('current');
+    if (line) line.classList.toggle('filled', i < cur);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  const s = STEPS[currentStep];
+  if (['welcome','section'].includes(s?.type) && e.key === 'Enter') advance();
+  if (s?.type === 'radio' && e.key >= '1' && e.key <= '9') {
+    const btns = document.querySelectorAll('.choice-btn');
+    if (btns[parseInt(e.key) - 1]) btns[parseInt(e.key) - 1].click();
+  }
+});
+
+buildSectionMap();
+render(0);
+</script>
+</body>
+</html>
