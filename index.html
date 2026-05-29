@@ -37,6 +37,11 @@
     overflow: hidden;
   }
 
+  /* ── Mobile: let the page scroll so keyboard doesn't bury the button ── */
+  @media (max-width: 768px) {
+    html, body { overflow: auto; height: auto; min-height: 100%; }
+  }
+
   /* ── Progress bar ───────────────────────────────────────────── */
   #progress-bar {
     position: fixed;
@@ -77,6 +82,19 @@
     opacity: 1;
     transform: translateY(0);
     pointer-events: all;
+  }
+
+  /* ── Mobile screen layout: static flow so keyboard doesn't hide content ── */
+  @media (max-width: 768px) {
+    .screen {
+      position: relative;
+      min-height: 100svh;
+      top: auto; left: auto; right: auto; bottom: auto;
+      align-items: flex-start;
+      padding: 80px 20px 110px;
+    }
+    .screen:not(.active) { display: none; }
+    .screen.exit-up { display: none; }
   }
   .screen.exit-up {
     opacity: 0;
@@ -475,8 +493,30 @@
     margin-bottom: 24px;
   }
 
+  @media (max-width: 768px) {
+    /* Sticky OK button — always above keyboard */
+    .nav-row {
+      position: sticky;
+      bottom: 80px; /* sits above section-map bar */
+      background: var(--lc-cream);
+      padding: 12px 0 4px;
+      margin-top: 20px;
+      z-index: 10;
+    }
+    /* Bigger touch targets */
+    .btn-next { padding: 16px 32px; font-size: 13px; min-width: 100px; }
+    .btn-back  { padding: 15px 22px; }
+    .choice-btn { padding: 16px 14px; font-size: 15px; min-height: 52px; }
+    /* Section map shrinks */
+    #section-map { height: 52px; }
+    .map-label { display: none; }
+    .map-dot { width: 8px; height: 8px; }
+    .map-node.current .map-dot { width: 12px; height: 12px; }
+    .map-node { gap: 0; }
+    .map-line { margin-bottom: 0; }
+  }
+
   @media (max-width: 480px) {
-    .screen { padding: 80px 16px 48px; align-items: flex-start; }
     .welcome-title { font-size: 36px; }
     .section-headline { font-size: 28px; }
   }
