@@ -1,0 +1,17 @@
+{
+  "name": "love-church-brand",
+  "version": "0.2.0",
+  "description": "Love Church brand voice, content workflows, and creative tools \u2014 bundled for the whole staff. Includes the LC voice guidelines, always-on church context, sermon content kits, social/email/slide generators, creative-brief workflows, and creative-director + worship-leader review skills.",
+  "author": {
+    "name": "Adam Deidel",
+    "email": "adam@lovechurch.org"
+  },
+  "homepage": "https://www.lovechurch.org",
+  "keywords": [
+    "love-church",
+    "brand-voice",
+    "church",
+    "content",
+    "creative"
+  ]
+}

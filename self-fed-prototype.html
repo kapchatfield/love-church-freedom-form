@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#E8E5DE">
+<title>Self-Fed — Love Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#E8E5DE;
+    --cream-2:#DDD9D0;
+    --ink:#0A0A0A;
+    --ink-2:#2A2A2A;
+    --muted:#7A746B;
+    --pink:#EC2F8A;
+    --pink-2:#FF4DA0;
+    --white:#FFFFFF;
+    --border:#CFCAC0;
+    --good:#1A8F4A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:#1c1c1e;font-family:'Inter',sans-serif;color:var(--ink);overscroll-behavior:none}
+  body{display:flex;align-items:center;justify-content:center;padding:24px;min-height:100vh}
+
+  /* Phone frame for desktop preview */
+  .phone-frame{
+    width:390px;height:844px;background:var(--cream);
+    border-radius:48px;
+    box-shadow:0 0 0 12px #111, 0 0 0 14px #333, 0 30px 80px rgba(0,0,0,.5);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:120px;height:28px;background:#000;border-radius:16px;z-index:50}
+
+  @media (max-width:480px){
+    body{padding:0;background:var(--cream)}
+    .phone-frame{width:100vw;height:100vh;border-radius:0;box-shadow:none}
+    .notch{display:none}
+  }
+
+  .screen{flex:1;display:flex;flex-direction:column;padding-top:44px;overflow:hidden}
+  .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 100px}
+  .scroll::-webkit-scrollbar{display:none}
+
+  /* TYPOGRAPHY */
+  .display{font-family:'Anton',sans-serif;letter-spacing:-0.01em;line-height:0.88;text-transform:uppercase}
+  .h1{font-family:'Anton',sans-serif;font-size:46px;line-height:0.92;text-transform:uppercase;letter-spacing:-0.005em}
+  .h2{font-family:'Anton',sans-serif;font-size:30px;line-height:0.95;text-transform:uppercase}
+  .h3{font-family:'Inter',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.01em}
+  .eyebrow{font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink)}
+  .label{font-family:'Inter',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+  .body{font-size:14px;line-height:1.5;color:var(--ink-2)}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* HEADER */
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 12px;background:var(--cream)}
+  .topbar .date{font-weight:700;font-size:13px;color:var(--ink)}
+  .streak{display:flex;align-items:center;gap:6px;background:#000;color:var(--cream);padding:6px 10px;border-radius:999px;font-size:11px;font-weight:700}
+  .streak .dot{width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px rgba(236,47,138,.25)}
+
+  /* CARDS */
+  .card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:20px}
+  .card-dark{background:var(--ink);color:var(--cream);border-radius:24px;padding:20px;border:none}
+  .card-pink{background:var(--pink);color:var(--white);border-radius:24px;padding:20px;border:none}
+
+  /* PILLARS BAR */
+  .pillars{display:flex;gap:8px;margin:16px 0 6px}
+  .pillar{flex:1;background:var(--cream-2);border:1px solid var(--border);border-radius:14px;padding:10px 8px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);position:relative;transition:all .15s}
+  .pillar.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .pillar.done{background:var(--pink);color:var(--white);border-color:var(--pink)}
+  .pillar .n{display:block;font-size:9px;opacity:.6;margin-bottom:2px}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;border-radius:999px;padding:14px 20px;width:100%;transition:transform .1s, background .15s}
+  .btn:active{transform:scale(0.98)}
+  .btn-primary{background:var(--ink);color:var(--cream)}
+  .btn-pink{background:var(--pink);color:var(--white)}
+  .btn-outline{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+  .btn-ghost{background:transparent;color:var(--ink);font-weight:600}
+  .btn-sm{padding:9px 14px;font-size:12px}
+  .btn:disabled{opacity:.5;cursor:default}
+
+  /* GRID */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .quick{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s}
+  .quick:active{transform:scale(0.97)}
+  .quick.done{background:var(--pink);color:var(--white);border-color:var(--pink)}
+  .quick .ico{font-size:22px;margin-bottom:6px}
+  .quick .lbl{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+
+  /* WEEK STRIP */
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .wd{aspect-ratio:1/1.4;border-radius:12px;background:var(--white);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-weight:700}
+  .wd .d{font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .wd .n{font-size:16px;margin-top:2px}
+  .wd.today{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .wd.today .d{color:var(--cream)}
+  .wd.done{background:var(--pink);color:var(--white);border-color:var(--pink)}
+  .wd.done .d{color:var(--white)}
+
+  /* VIDEO PLACEHOLDER */
+  .video{position:relative;background:linear-gradient(135deg,#1a1a1a,#3a3a3a);aspect-ratio:16/9;border-radius:18px;overflow:hidden;cursor:pointer}
+  .video::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center, rgba(236,47,138,.4) 0%, transparent 50%)}
+  .video .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .video .play::after{content:'';border-style:solid;border-width:11px 0 11px 18px;border-color:transparent transparent transparent var(--ink);margin-left:4px}
+  .video .meta{position:absolute;left:14px;bottom:14px;right:14px;color:var(--white);z-index:1}
+  .video .meta .who{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8;margin-bottom:2px}
+  .video .meta .title{font-family:'Anton',sans-serif;font-size:22px;line-height:1;text-transform:uppercase}
+
+  /* BOTTOM NAV */
+  .nav{position:absolute;left:0;right:0;bottom:0;height:78px;background:rgba(232,229,222,0.92);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding-bottom:14px;z-index:30}
+  .navbtn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .navbtn.active{color:var(--ink)}
+  .navbtn.active .navico{color:var(--pink)}
+  .navico{font-size:20px;line-height:1}
+
+  /* PROGRESS RING */
+  .ring{position:relative;width:64px;height:64px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .ringval{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+
+  /* INPUTS */
+  textarea,input{font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px;width:100%;outline:none;resize:none}
+  textarea:focus,input:focus{border-color:var(--ink)}
+
+  /* LIST */
+  .row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+  .row:last-child{border-bottom:none}
+  .row .left{display:flex;align-items:center;gap:12px}
+  .row .av{width:34px;height:34px;border-radius:50%;background:var(--pink);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+
+  /* PRINT FRIENDLY (for study guide export) */
+  .guide-section{margin-bottom:18px}
+  .q{padding:14px;border-left:3px solid var(--pink);background:var(--white);border-radius:0 10px 10px 0;margin-bottom:8px;font-size:13px;line-height:1.5}
+
+  /* MISC */
+  .center{text-align:center}
+  .mt-4{margin-top:16px}.mt-6{margin-top:24px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}
+  .mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}
+  .gap-2{gap:8px}.gap-3{gap:12px}
+  .flex{display:flex}.between{justify-content:space-between}.aic{align-items:center}.col{flex-direction:column}
+  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--cream-2);color:var(--ink-2)}
+  .pill.pink{background:var(--pink);color:var(--white)}
+  .pill.ink{background:var(--ink);color:var(--cream)}
+  .badge-circle{width:88px;height:88px;border-radius:50%;background:var(--pink);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;text-align:center;letter-spacing:.12em;text-transform:uppercase;padding:8px;line-height:1.2;transform:rotate(-8deg);position:relative}
+  .arrow-down{display:inline-block;margin-top:2px;font-size:14px}
+  hr.dash{border:none;border-top:1px dashed var(--border);margin:16px 0}
+
+  /* DESKTOP SIDE INFO */
+  .side-info{position:fixed;left:24px;top:24px;color:#999;max-width:240px;font-size:12px;line-height:1.6}
+  .side-info h2{font-family:'Anton',sans-serif;font-size:34px;color:#fff;letter-spacing:-.01em;line-height:.9;margin-bottom:8px;text-transform:uppercase}
+  .side-info .tag{display:inline-block;background:#EC2F8A;color:#fff;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+  .side-info p{margin-bottom:10px}
+  .side-info button{background:#222;color:#fff;border:1px solid #444;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:8px;width:100%}
+  .side-info button:hover{background:#333}
+  @media (max-width:900px){.side-info{display:none}}
+
+  /* HIDE inactive screens */
+  .hidden{display:none !important}
+
+  /* CALENDAR */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal .h{font-size:9px;font-weight:700;color:var(--muted);text-align:center;padding:6px 0;letter-spacing:.08em;text-transform:uppercase}
+  .cal .d{aspect-ratio:1/1;border-radius:8px;background:var(--cream-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid transparent}
+  .cal .d.done{background:var(--pink);color:var(--white)}
+  .cal .d.today{border-color:var(--ink);background:var(--ink);color:var(--cream)}
+  .cal .d.future{background:transparent;color:var(--muted);border:1px solid var(--border)}
+  .cal .d.empty{visibility:hidden}
+
+  .month-nav{display:flex;justify-content:space-between;align-items:center;padding:8px 0 14px}
+  .month-nav button{background:none;border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;color:var(--ink);background:var(--white)}
+
+  /* SCROLLABLE READING TEXT */
+  .verse{font-size:15px;line-height:1.65;color:var(--ink-2);margin-bottom:14px}
+  .verse .num{color:var(--pink);font-weight:800;margin-right:6px;font-size:11px;vertical-align:top}
+
+  /* AUTH */
+  .auth-wrap{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:60px 28px 100px;background:var(--cream)}
+  .auth-buttons{display:flex;flex-direction:column;gap:10px}
+  .btn-apple{background:#000;color:#fff}
+  .btn-google{background:#fff;color:#0A0A0A;border:1px solid var(--border)}
+
+  /* STUDY GUIDE */
+  .guide{background:var(--white);border-radius:20px;padding:22px;border:1px solid var(--border)}
+  .guide h1{font-family:'Anton',sans-serif;font-size:30px;text-transform:uppercase;line-height:1;margin-bottom:6px}
+  .guide h4{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+  .guide h5{font-family:'Anton',sans-serif;font-size:16px;text-transform:uppercase;margin:18px 0 8px;letter-spacing:.02em}
+  .guide p{font-size:13px;line-height:1.55;color:var(--ink-2);margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="side-info">
+  <span class="tag">Prototype</span>
+  <h2>Self-Fed<br>App</h2>
+  <p>Love Church Omaha · 2026 Reading Guide</p>
+  <p>Tap through the phone to navigate. The app defaults to today (W 5/27, 2026). Try the bottom nav, the Read/Watch/Journal/Pray buttons, the leader toggle in Profile, and the calendar in Plan.</p>
+  <button onclick="toggleRole()">Toggle Member / Leader</button>
+  <button onclick="resetState()">Reset Progress</button>
+</div>
+
+<div class="phone-frame">
+  <div class="notch"></div>
+  <div id="app" class="screen"></div>
+</div>
+
+<script>
+const READINGS = [{"i":1,"m":1,"day":1,"iso":"2026-01-01","w":"Th","p":"Genesis 1-2","s":"Psalm 1"},{"i":2,"m":1,"day":2,"iso":"2026-01-02","w":"F","p":"Genesis 3-4","s":"Psalm 2"},{"i":3,"m":1,"day":3,"iso":"2026-01-03","w":"Sa","p":"Genesis 5-6","s":"Psalm 3"},{"i":4,"m":1,"day":4,"iso":"2026-01-04","w":"Su","p":"Genesis 7-8","s":"Psalm 4"},{"i":5,"m":1,"day":5,"iso":"2026-01-05","w":"M","p":"Genesis 9-10","s":"Psalm 5"},{"i":6,"m":1,"day":6,"iso":"2026-01-06","w":"Tu","p":"Genesis 11-12","s":"Psalm 6"},{"i":7,"m":1,"day":7,"iso":"2026-01-07","w":"W","p":"Genesis 13-14","s":"Psalm 7"},{"i":8,"m":1,"day":8,"iso":"2026-01-08","w":"Th","p":"Genesis 15-16","s":"Psalm 8"},{"i":9,"m":1,"day":9,"iso":"2026-01-09","w":"F","p":"Genesis 17-18","s":"Psalm 9"},{"i":10,"m":1,"day":10,"iso":"2026-01-10","w":"Sa","p":"Genesis 19-20","s":"Psalm 10"},{"i":11,"m":1,"day":11,"iso":"2026-01-11","w":"Su","p":"Genesis 21-22","s":"Psalm 11"},{"i":12,"m":1,"day":12,"iso":"2026-01-12","w":"M","p":"Genesis 23-24","s":"Psalm 12"},{"i":13,"m":1,"day":13,"iso":"2026-01-13","w":"Tu","p":"Genesis 25-26","s":"Psalm 13"},{"i":14,"m":1,"day":14,"iso":"2026-01-14","w":"W","p":"Genesis 27-28","s":"Psalm 14"},{"i":15,"m":1,"day":15,"iso":"2026-01-15","w":"Th","p":"Genesis 29-30","s":"Psalm 15"},{"i":16,"m":1,"day":16,"iso":"2026-01-16","w":"F","p":"Genesis 31-32","s":"Psalm 16"},{"i":17,"m":1,"day":17,"iso":"2026-01-17","w":"Sa","p":"Genesis 33-34","s":"Psalm 17"},{"i":18,"m":1,"day":18,"iso":"2026-01-18","w":"Su","p":"Genesis 35-36","s":"Psalm 18"},{"i":19,"m":1,"day":19,"iso":"2026-01-19","w":"M","p":"Genesis 37-38","s":"Psalm 19"},{"i":20,"m":1,"day":20,"iso":"2026-01-20","w":"Tu","p":"Genesis 39-40","s":"Psalm 20"},{"i":21,"m":1,"day":21,"iso":"2026-01-21","w":"W","p":"Genesis 41-42","s":"Psalm 21"},{"i":22,"m":1,"day":22,"iso":"2026-01-22","w":"Th","p":"Genesis 43-44","s":"Psalm 22"},{"i":23,"m":1,"day":23,"iso":"2026-01-23","w":"F","p":"Genesis 45-46","s":"Psalm 23"},{"i":24,"m":1,"day":24,"iso":"2026-01-24","w":"Sa","p":"Genesis 47-48","s":"Psalm 24"},{"i":25,"m":1,"day":25,"iso":"2026-01-25","w":"Su","p":"Genesis 49-50","s":"Psalm 25"},{"i":26,"m":1,"day":26,"iso":"2026-01-26","w":"M","p":"Exodus 1-2","s":"Psalm 26"},{"i":27,"m":1,"day":27,"iso":"2026-01-27","w":"Tu","p":"Exodus 3-4","s":"Psalm 27"},{"i":28,"m":1,"day":28,"iso":"2026-01-28","w":"W","p":"Exodus 5-6","s":"Psalm 28"},{"i":29,"m":1,"day":29,"iso":"2026-01-29","w":"Th","p":"Exodus 7-8","s":"Psalm 29"},{"i":30,"m":1,"day":30,"iso":"2026-01-30","w":"F","p":"Exodus 9-10","s":"Psalm 30"},{"i":31,"m":1,"day":31,"iso":"2026-01-31","w":"Sa","p":"Exodus 11-12","s":"Psalm 31"},{"i":32,"m":2,"day":1,"iso":"2026-02-01","w":"Su","p":"Exodus 13-14","s":"Psalm 32"},{"i":33,"m":2,"day":2,"iso":"2026-02-02","w":"M","p":"Exodus 15-16","s":"Psalm 33"},{"i":34,"m":2,"day":3,"iso":"2026-02-03","w":"Tu","p":"Exodus 17-18","s":"Psalm 34"},{"i":35,"m":2,"day":4,"iso":"2026-02-04","w":"W","p":"Exodus 19-20","s":"Psalm 35"},{"i":36,"m":2,"day":5,"iso":"2026-02-05","w":"Th","p":"Exodus 21-22","s":"Psalm 36"},{"i":37,"m":2,"day":6,"iso":"2026-02-06","w":"F","p":"Exodus 23-24","s":"Psalm 37"},{"i":38,"m":2,"day":7,"iso":"2026-02-07","w":"Sa","p":"Exodus 25-26","s":"Psalm 38"},{"i":39,"m":2,"day":8,"iso":"2026-02-08","w":"Su","p":"Exodus 27-28","s":"Psalm 39"},{"i":40,"m":2,"day":9,"iso":"2026-02-09","w":"M","p":"Exodus 29-30","s":"Psalm 40"},{"i":41,"m":2,"day":10,"iso":"2026-02-10","w":"Tu","p":"Exodus 31-32","s":"Psalm 41"},{"i":42,"m":2,"day":11,"iso":"2026-02-11","w":"W","p":"Exodus 33-34","s":"Psalm 42"},{"i":43,"m":2,"day":12,"iso":"2026-02-12","w":"Th","p":"Exodus 35-36","s":"Psalm 43"},{"i":44,"m":2,"day":13,"iso":"2026-02-13","w":"F","p":"Exodus 37-38","s":"Psalm 44"},{"i":45,"m":2,"day":14,"iso":"2026-02-14","w":"Sa","p":"Exodus 39-40","s":"Psalm 45"},{"i":46,"m":2,"day":15,"iso":"2026-02-15","w":"Su","p":"Leviticus 1-3","s":"Psalm 46"},{"i":47,"m":2,"day":16,"iso":"2026-02-16","w":"M","p":"Leviticus 4-5","s":"Psalm 47"},{"i":48,"m":2,"day":17,"iso":"2026-02-17","w":"Tu","p":"Leviticus 6-7","s":"Psalm 48"},{"i":49,"m":2,"day":18,"iso":"2026-02-18","w":"W","p":"Leviticus 8-9","s":"Psalm 49"},{"i":50,"m":2,"day":19,"iso":"2026-02-19","w":"Th","p":"Leviticus 10-11","s":"Psalm 50"},{"i":51,"m":2,"day":20,"iso":"2026-02-20","w":"F","p":"Leviticus 12-13","s":"Psalm 51"},{"i":52,"m":2,"day":21,"iso":"2026-02-21","w":"Sa","p":"Leviticus 14-15","s":"Psalm 52"},{"i":53,"m":2,"day":22,"iso":"2026-02-22","w":"Su","p":"Leviticus 16-17","s":"Psalm 53"},{"i":54,"m":2,"day":23,"iso":"2026-02-23","w":"M","p":"Leviticus 18-19","s":"Psalm 54"},{"i":55,"m":2,"day":24,"iso":"2026-02-24","w":"Tu","p":"Leviticus 20-21","s":"Psalm 55"},{"i":56,"m":2,"day":25,"iso":"2026-02-25","w":"W","p":"Leviticus 22-23","s":"Psalm 56"},{"i":57,"m":2,"day":26,"iso":"2026-02-26","w":"Th","p":"Leviticus 24-25","s":"Psalm 57"},{"i":58,"m":2,"day":27,"iso":"2026-02-27","w":"F","p":"Leviticus 26-27","s":"Psalm 58"},{"i":59,"m":2,"day":28,"iso":"2026-02-28","w":"Sa","p":"Numbers 1-2","s":"Psalm 59"},{"i":60,"m":3,"day":1,"iso":"2026-03-01","w":"Su","p":"Numbers 3-4","s":"Psalm 60"},{"i":61,"m":3,"day":2,"iso":"2026-03-02","w":"M","p":"Numbers 5-6","s":"Psalm 61"},{"i":62,"m":3,"day":3,"iso":"2026-03-03","w":"Tu","p":"Numbers 7-8","s":"Psalm 62"},{"i":63,"m":3,"day":4,"iso":"2026-03-04","w":"W","p":"Numbers 9-10","s":"Psalm 63"},{"i":64,"m":3,"day":5,"iso":"2026-03-05","w":"Th","p":"Numbers 11-12","s":"Psalm 64"},{"i":65,"m":3,"day":6,"iso":"2026-03-06","w":"F","p":"Numbers 13-14","s":"Psalm 65"},{"i":66,"m":3,"day":7,"iso":"2026-03-07","w":"Sa","p":"Numbers 15-16","s":"Psalm 66"},{"i":67,"m":3,"day":8,"iso":"2026-03-08","w":"Su","p":"Numbers 17-18","s":"Psalm 67"},{"i":68,"m":3,"day":9,"iso":"2026-03-09","w":"M","p":"Numbers 19-20","s":"Psalm 68"},{"i":69,"m":3,"day":10,"iso":"2026-03-10","w":"Tu","p":"Numbers 21-22","s":"Psalm 69"},{"i":70,"m":3,"day":11,"iso":"2026-03-11","w":"W","p":"Numbers 23-24","s":"Psalm 70"},{"i":71,"m":3,"day":12,"iso":"2026-03-12","w":"Th","p":"Numbers 25-26","s":"Psalm 71"},{"i":72,"m":3,"day":13,"iso":"2026-03-13","w":"F","p":"Numbers 27-28","s":"Psalm 72"},{"i":73,"m":3,"day":14,"iso":"2026-03-14","w":"Sa","p":"Numbers 29-30","s":"Psalm 73"},{"i":74,"m":3,"day":15,"iso":"2026-03-15","w":"Su","p":"Numbers 31-32","s":"Psalm 74"},{"i":75,"m":3,"day":16,"iso":"2026-03-16","w":"M","p":"Numbers 33-34","s":"Psalm 75"},{"i":76,"m":3,"day":17,"iso":"2026-03-17","w":"Tu","p":"Numbers 35-36","s":"Psalm 76"},{"i":77,"m":3,"day":18,"iso":"2026-03-18","w":"W","p":"Deuteronomy 1-2","s":"Psalm 77"},{"i":78,"m":3,"day":19,"iso":"2026-03-19","w":"Th","p":"Deuteronomy 3-4","s":"Psalm 78"},{"i":79,"m":3,"day":20,"iso":"2026-03-20","w":"F","p":"Deuteronomy 5-6","s":"Psalm 79"},{"i":80,"m":3,"day":21,"iso":"2026-03-21","w":"Sa","p":"Deuteronomy 7-8","s":"Psalm 80"},{"i":81,"m":3,"day":22,"iso":"2026-03-22","w":"Su","p":"Deuteronomy 9-10","s":"Psalm 81"},{"i":82,"m":3,"day":23,"iso":"2026-03-23","w":"M","p":"Deuteronomy 11-12","s":"Psalm 82"},{"i":83,"m":3,"day":24,"iso":"2026-03-24","w":"Tu","p":"Deuteronomy 13-14","s":"Psalm 83"},{"i":84,"m":3,"day":25,"iso":"2026-03-25","w":"W","p":"Deuteronomy 15-16","s":"Psalm 84"},{"i":85,"m":3,"day":26,"iso":"2026-03-26","w":"Th","p":"Deuteronomy 17-18","s":"Psalm 85"},{"i":86,"m":3,"day":27,"iso":"2026-03-27","w":"F","p":"Deuteronomy 19-20","s":"Psalm 86"},{"i":87,"m":3,"day":28,"iso":"2026-03-28","w":"Sa","p":"Deuteronomy 21-22","s":"Psalm 87"},{"i":88,"m":3,"day":29,"iso":"2026-03-29","w":"Su","p":"Deuteronomy 23-24","s":"Psalm 88"},{"i":89,"m":3,"day":30,"iso":"2026-03-30","w":"M","p":"Deuteronomy 25","s":"Psalm 89"},{"i":90,"m":3,"day":31,"iso":"2026-03-31","w":"Tu","p":"Deuteronomy 26-27","s":"Psalm 90"},{"i":91,"m":4,"day":1,"iso":"2026-04-01","w":"W","p":"Deuteronomy 28","s":"Psalm 91"},{"i":92,"m":4,"day":2,"iso":"2026-04-02","w":"Th","p":"Deuteronomy 29-30","s":"Psalm 92"},{"i":93,"m":4,"day":3,"iso":"2026-04-03","w":"F","p":"Deuteronomy 31-32","s":"Psalm 93"},{"i":94,"m":4,"day":4,"iso":"2026-04-04","w":"Sa","p":"Deuteronomy 33-34","s":"Psalm 94"},{"i":95,"m":4,"day":5,"iso":"2026-04-05","w":"Su","p":"Joshua 1-2","s":"Psalm 95"},{"i":96,"m":4,"day":6,"iso":"2026-04-06","w":"M","p":"Joshua 3-4","s":"Psalm 96"},{"i":97,"m":4,"day":7,"iso":"2026-04-07","w":"Tu","p":"Joshua 5-6","s":"Psalm 97"},{"i":98,"m":4,"day":8,"iso":"2026-04-08","w":"W","p":"Joshua 7-8","s":"Psalm 98"},{"i":99,"m":4,"day":9,"iso":"2026-04-09","w":"Th","p":"Joshua 9-10","s":"Psalm 99"},{"i":100,"m":4,"day":10,"iso":"2026-04-10","w":"F","p":"Joshua 11-12","s":"Psalm 100"},{"i":101,"m":4,"day":11,"iso":"2026-04-11","w":"Sa","p":"Joshua 13-14","s":"Psalm 101"},{"i":102,"m":4,"day":12,"iso":"2026-04-12","w":"Su","p":"Joshua 15-16","s":"Psalm 102"},{"i":103,"m":4,"day":13,"iso":"2026-04-13","w":"M","p":"Joshua 17-18","s":"Psalm 103"},{"i":104,"m":4,"day":14,"iso":"2026-04-14","w":"Tu","p":"Joshua 19-20","s":"Psalm 104"},{"i":105,"m":4,"day":15,"iso":"2026-04-15","w":"W","p":"Joshua 21-22","s":"Psalm 105"},{"i":106,"m":4,"day":16,"iso":"2026-04-16","w":"Th","p":"Joshua 23-24","s":"Psalm 106"},{"i":107,"m":4,"day":17,"iso":"2026-04-17","w":"F","p":"Judges 1-2","s":"Psalm 107"},{"i":108,"m":4,"day":18,"iso":"2026-04-18","w":"Sa","p":"Judges 3-4","s":"Psalm 108"},{"i":109,"m":4,"day":19,"iso":"2026-04-19","w":"Su","p":"Judges 5-6","s":"Psalm 109"},{"i":110,"m":4,"day":20,"iso":"2026-04-20","w":"M","p":"Judges 7-8","s":"Psalm 110"},{"i":111,"m":4,"day":21,"iso":"2026-04-21","w":"Tu","p":"Judges 9-10","s":"Psalm 111"},{"i":112,"m":4,"day":22,"iso":"2026-04-22","w":"W","p":"Judges 11-12","s":"Psalm 112"},{"i":113,"m":4,"day":23,"iso":"2026-04-23","w":"Th","p":"Judges 13-14","s":"Psalm 113"},{"i":114,"m":4,"day":24,"iso":"2026-04-24","w":"F","p":"Judges 15-17","s":"Psalm 114"},{"i":115,"m":4,"day":25,"iso":"2026-04-25","w":"Sa","p":"Judges 18-19","s":"Psalm 115"},{"i":116,"m":4,"day":26,"iso":"2026-04-26","w":"Su","p":"Judges 20-21","s":"Psalm 116"},{"i":117,"m":4,"day":27,"iso":"2026-04-27","w":"M","p":"Ruth 1-2","s":"Psalm 117"},{"i":118,"m":4,"day":28,"iso":"2026-04-28","w":"Tu","p":"Ruth 3-4","s":"Psalm 118"},{"i":119,"m":4,"day":29,"iso":"2026-04-29","w":"W","p":"1 Samuel 1-2","s":"Psalm 119:1-88"},{"i":120,"m":4,"day":30,"iso":"2026-04-30","w":"Th","p":"1 Samuel 3-4","s":"Psalm 119:89-176"},{"i":121,"m":5,"day":1,"iso":"2026-05-01","w":"F","p":"1 Samuel 5-7","s":"Psalm 120"},{"i":122,"m":5,"day":2,"iso":"2026-05-02","w":"Sa","p":"1 Samuel 8-9","s":"Psalm 121"},{"i":123,"m":5,"day":3,"iso":"2026-05-03","w":"Su","p":"1 Samuel 10-11","s":"Psalm 122"},{"i":124,"m":5,"day":4,"iso":"2026-05-04","w":"M","p":"1 Samuel 12-13","s":"Psalm 123"},{"i":125,"m":5,"day":5,"iso":"2026-05-05","w":"Tu","p":"1 Samuel 14-15","s":"Psalm 124"},{"i":126,"m":5,"day":6,"iso":"2026-05-06","w":"W","p":"1 Samuel 16-17","s":"Psalm 125"},{"i":127,"m":5,"day":7,"iso":"2026-05-07","w":"Th","p":"1 Samuel 18-19","s":"Psalm 126"},{"i":128,"m":5,"day":8,"iso":"2026-05-08","w":"F","p":"1 Samuel 20-21","s":"Psalm 127"},{"i":129,"m":5,"day":9,"iso":"2026-05-09","w":"Sa","p":"1 Samuel 22-23","s":"Psalm 128"},{"i":130,"m":5,"day":10,"iso":"2026-05-10","w":"Su","p":"1 Samuel 24-25","s":"Psalm 129"},{"i":131,"m":5,"day":11,"iso":"2026-05-11","w":"M","p":"1 Samuel 26-27","s":"Psalm 130"},{"i":132,"m":5,"day":12,"iso":"2026-05-12","w":"Tu","p":"1 Samuel 28-29","s":"Psalm 131"},{"i":133,"m":5,"day":13,"iso":"2026-05-13","w":"W","p":"1 Samuel 30-31","s":"Psalm 132"},{"i":134,"m":5,"day":14,"iso":"2026-05-14","w":"Th","p":"2 Samuel 1-2","s":"Psalm 133"},{"i":135,"m":5,"day":15,"iso":"2026-05-15","w":"F","p":"2 Samuel 3-4","s":"Psalm 134"},{"i":136,"m":5,"day":16,"iso":"2026-05-16","w":"Sa","p":"2 Samuel 5-6","s":"Psalm 135"},{"i":137,"m":5,"day":17,"iso":"2026-05-17","w":"Su","p":"2 Samuel 7-8","s":"Psalm 136"},{"i":138,"m":5,"day":18,"iso":"2026-05-18","w":"M","p":"2 Samuel 9-10","s":"Psalm 137"},{"i":139,"m":5,"day":19,"iso":"2026-05-19","w":"Tu","p":"2 Samuel 11-12","s":"Psalm 138"},{"i":140,"m":5,"day":20,"iso":"2026-05-20","w":"W","p":"2 Samuel 13-14","s":"Psalm 139"},{"i":141,"m":5,"day":21,"iso":"2026-05-21","w":"Th","p":"2 Samuel 15-16","s":"Psalm 140"},{"i":142,"m":5,"day":22,"iso":"2026-05-22","w":"F","p":"2 Samuel 17-18","s":"Psalm 141"},{"i":143,"m":5,"day":23,"iso":"2026-05-23","w":"Sa","p":"2 Samuel 19-20","s":"Psalm 142"},{"i":144,"m":5,"day":24,"iso":"2026-05-24","w":"Su","p":"2 Samuel 21-22","s":"Psalm 143"},{"i":145,"m":5,"day":25,"iso":"2026-05-25","w":"M","p":"2 Samuel 23-24","s":"Psalm 144"},{"i":146,"m":5,"day":26,"iso":"2026-05-26","w":"Tu","p":"1 Kings 1-2","s":"Psalm 145"},{"i":147,"m":5,"day":27,"iso":"2026-05-27","w":"W","p":"1 Kings 3-4","s":"Psalm 146"},{"i":148,"m":5,"day":28,"iso":"2026-05-28","w":"Th","p":"1 Kings 5-6","s":"Psalm 147"},{"i":149,"m":5,"day":29,"iso":"2026-05-29","w":"F","p":"1 Kings 7-8","s":"Psalm 148"},{"i":150,"m":5,"day":30,"iso":"2026-05-30","w":"Sa","p":"1 Kings 9-10","s":"Psalm 149"},{"i":151,"m":5,"day":31,"iso":"2026-05-31","w":"Su","p":"1 Kings 11-12","s":"Psalm 150"},{"i":152,"m":6,"day":1,"iso":"2026-06-01","w":"M","p":"1 Kings 13-14","s":"Proverbs 1"},{"i":153,"m":6,"day":2,"iso":"2026-06-02","w":"Tu","p":"1 Kings 15-16","s":"Proverbs 2"},{"i":154,"m":6,"day":3,"iso":"2026-06-03","w":"W","p":"1 Kings 17-18","s":"Proverbs 3"},{"i":155,"m":6,"day":4,"iso":"2026-06-04","w":"Th","p":"1 Kings 19-20","s":"Proverbs 4"},{"i":156,"m":6,"day":5,"iso":"2026-06-05","w":"F","p":"1 Kings 21-22","s":"Proverbs 5"},{"i":157,"m":6,"day":6,"iso":"2026-06-06","w":"Sa","p":"2 Kings 1-2","s":"Proverbs 6"},{"i":158,"m":6,"day":7,"iso":"2026-06-07","w":"Su","p":"2 Kings 3-4","s":"Proverbs 7"},{"i":159,"m":6,"day":8,"iso":"2026-06-08","w":"M","p":"2 Kings 5-6","s":"Proverbs 8"},{"i":160,"m":6,"day":9,"iso":"2026-06-09","w":"Tu","p":"2 Kings 7-8","s":"Proverbs 9"},{"i":161,"m":6,"day":10,"iso":"2026-06-10","w":"W","p":"2 Kings 9-10","s":"Proverbs 10"},{"i":162,"m":6,"day":11,"iso":"2026-06-11","w":"Th","p":"2 Kings 11-12","s":"Proverbs 11"},{"i":163,"m":6,"day":12,"iso":"2026-06-12","w":"F","p":"2 Kings 13-14","s":"Proverbs 12"},{"i":164,"m":6,"day":13,"iso":"2026-06-13","w":"Sa","p":"2 Kings 15-16","s":"Proverbs 13"},{"i":165,"m":6,"day":14,"iso":"2026-06-14","w":"Su","p":"2 Kings 17","s":"Proverbs 14"},{"i":166,"m":6,"day":15,"iso":"2026-06-15","w":"M","p":"2 Kings 18-19","s":"Proverbs 15"},{"i":167,"m":6,"day":16,"iso":"2026-06-16","w":"Tu","p":"2 Kings 20-21","s":"Proverbs 16"},{"i":168,"m":6,"day":17,"iso":"2026-06-17","w":"W","p":"2 Kings 22-23","s":"Proverbs 17"},{"i":169,"m":6,"day":18,"iso":"2026-06-18","w":"Th","p":"2 Kings 24-25","s":"Proverbs 18"},{"i":170,"m":6,"day":19,"iso":"2026-06-19","w":"F","p":"1 Chronicles 1-2","s":"Proverbs 19"},{"i":171,"m":6,"day":20,"iso":"2026-06-20","w":"Sa","p":"1 Chronicles 3-4","s":"Proverbs 20"},{"i":172,"m":6,"day":21,"iso":"2026-06-21","w":"Su","p":"1 Chronicles 5-7","s":"Proverbs 21"},{"i":173,"m":6,"day":22,"iso":"2026-06-22","w":"M","p":"1 Chronicles 8-10","s":"Proverbs 22"},{"i":174,"m":6,"day":23,"iso":"2026-06-23","w":"Tu","p":"1 Chronicles 11-12","s":"Proverbs 23"},{"i":175,"m":6,"day":24,"iso":"2026-06-24","w":"W","p":"1 Chronicles 13-15","s":"Proverbs 24"},{"i":176,"m":6,"day":25,"iso":"2026-06-25","w":"Th","p":"1 Chronicles 16-17","s":"Proverbs 25"},{"i":177,"m":6,"day":26,"iso":"2026-06-26","w":"F","p":"1 Chronicles 18-20","s":"Proverbs 26"},{"i":178,"m":6,"day":27,"iso":"2026-06-27","w":"Sa","p":"1 Chronicles 21-22","s":"Proverbs 27"},{"i":179,"m":6,"day":28,"iso":"2026-06-28","w":"Su","p":"1 Chronicles 23-24","s":"Proverbs 28"},{"i":180,"m":6,"day":29,"iso":"2026-06-29","w":"M","p":"1 Chronicles 25-26","s":"Proverbs 29"},{"i":181,"m":6,"day":30,"iso":"2026-06-30","w":"Tu","p":"1 Chronicles 27-29","s":"Proverbs 30"},{"i":182,"m":7,"day":1,"iso":"2026-07-01","w":"W","p":"2 Chronicles 1-3","s":"Proverbs 31"},{"i":183,"m":7,"day":2,"iso":"2026-07-02","w":"Th","p":"2 Chronicles 4-5","s":"Matthew 1"},{"i":184,"m":7,"day":3,"iso":"2026-07-03","w":"F","p":"2 Chronicles 6-7","s":"Matthew 2"},{"i":185,"m":7,"day":4,"iso":"2026-07-04","w":"Sa","p":"2 Chronicles 8-9","s":"Matthew 3"},{"i":186,"m":7,"day":5,"iso":"2026-07-05","w":"Su","p":"2 Chronicles 10-11","s":"Matthew 4"},{"i":187,"m":7,"day":6,"iso":"2026-07-06","w":"M","p":"2 Chronicles 12-13","s":"Matthew 5"},{"i":188,"m":7,"day":7,"iso":"2026-07-07","w":"Tu","p":"2 Chronicles 14-15","s":"Matthew 6"},{"i":189,"m":7,"day":8,"iso":"2026-07-08","w":"W","p":"2 Chronicles 16-17","s":"Matthew 7"},{"i":190,"m":7,"day":9,"iso":"2026-07-09","w":"Th","p":"2 Chronicles 18-19","s":"Matthew 8"},{"i":191,"m":7,"day":10,"iso":"2026-07-10","w":"F","p":"2 Chronicles 20-21","s":"Matthew 9"},{"i":192,"m":7,"day":11,"iso":"2026-07-11","w":"Sa","p":"2 Chronicles 22","s":"Matthew 10"},{"i":193,"m":7,"day":12,"iso":"2026-07-12","w":"Su","p":"2 Chronicles 23-24","s":"Matthew 11"},{"i":194,"m":7,"day":13,"iso":"2026-07-13","w":"M","p":"2 Chronicles 25-26","s":"Matthew 12"},{"i":195,"m":7,"day":14,"iso":"2026-07-14","w":"Tu","p":"2 Chronicles 27-28","s":"Matthew 13"},{"i":196,"m":7,"day":15,"iso":"2026-07-15","w":"W","p":"2 Chronicles 29-30","s":"Matthew 14"},{"i":197,"m":7,"day":16,"iso":"2026-07-16","w":"Th","p":"2 Chronicles 31-32","s":"Matthew 15"},{"i":198,"m":7,"day":17,"iso":"2026-07-17","w":"F","p":"2 Chronicles 33-34","s":"Matthew 16"},{"i":199,"m":7,"day":18,"iso":"2026-07-18","w":"Sa","p":"2 Chronicles 35","s":"Matthew 17"},{"i":200,"m":7,"day":19,"iso":"2026-07-19","w":"Su","p":"2 Chronicles 36","s":"Matthew 18"},{"i":201,"m":7,"day":20,"iso":"2026-07-20","w":"M","p":"Ezra 1-2","s":"Matthew 19"},{"i":202,"m":7,"day":21,"iso":"2026-07-21","w":"Tu","p":"Ezra 3-4","s":"Matthew 20"},{"i":203,"m":7,"day":22,"iso":"2026-07-22","w":"W","p":"Ezra 5-6","s":"Matthew 21"},{"i":204,"m":7,"day":23,"iso":"2026-07-23","w":"Th","p":"Ezra 7-8","s":"Matthew 22"},{"i":205,"m":7,"day":24,"iso":"2026-07-24","w":"F","p":"Ezra 9-10","s":"Matthew 23"},{"i":206,"m":7,"day":25,"iso":"2026-07-25","w":"Sa","p":"Nehemiah 1-3","s":"Matthew 24"},{"i":207,"m":7,"day":26,"iso":"2026-07-26","w":"Su","p":"Nehemiah 4-5","s":"Matthew 25"},{"i":208,"m":7,"day":27,"iso":"2026-07-27","w":"M","p":"Nehemiah 6-7","s":"Matthew 26"},{"i":209,"m":7,"day":28,"iso":"2026-07-28","w":"Tu","p":"Nehemiah 8-9","s":"Matthew 27"},{"i":210,"m":7,"day":29,"iso":"2026-07-29","w":"W","p":"Nehemiah 10-11","s":"Matthew 28"},{"i":211,"m":7,"day":30,"iso":"2026-07-30","w":"Th","p":"Nehemiah 12-13","s":"Mark 1"},{"i":212,"m":7,"day":31,"iso":"2026-07-31","w":"F","p":"Esther 1-2","s":"Mark 2"},{"i":213,"m":8,"day":1,"iso":"2026-08-01","w":"Sa","p":"Esther 3-4","s":"Mark 3"},{"i":214,"m":8,"day":2,"iso":"2026-08-02","w":"Su","p":"Esther 5-6","s":"Mark 4"},{"i":215,"m":8,"day":3,"iso":"2026-08-03","w":"M","p":"Esther 7-8","s":"Mark 5"},{"i":216,"m":8,"day":4,"iso":"2026-08-04","w":"Tu","p":"Esther 9-10","s":"Mark 6"},{"i":217,"m":8,"day":5,"iso":"2026-08-05","w":"W","p":"Job 1-2","s":"Mark 7"},{"i":218,"m":8,"day":6,"iso":"2026-08-06","w":"Th","p":"Job 3-5","s":"Mark 8"},{"i":219,"m":8,"day":7,"iso":"2026-08-07","w":"F","p":"Job 6-7","s":"Mark 9"},{"i":220,"m":8,"day":8,"iso":"2026-08-08","w":"Sa","p":"Job 8-10","s":"Mark 10"},{"i":221,"m":8,"day":9,"iso":"2026-08-09","w":"Su","p":"Job 11-12","s":"Mark 11"},{"i":222,"m":8,"day":10,"iso":"2026-08-10","w":"M","p":"Job 13-14","s":"Mark 12"},{"i":223,"m":8,"day":11,"iso":"2026-08-11","w":"Tu","p":"Job 15-17","s":"Mark 13"},{"i":224,"m":8,"day":12,"iso":"2026-08-12","w":"W","p":"Job 18-19","s":"Mark 14"},{"i":225,"m":8,"day":13,"iso":"2026-08-13","w":"Th","p":"Job 20-21","s":"Mark 15"},{"i":226,"m":8,"day":14,"iso":"2026-08-14","w":"F","p":"Job 22-24","s":"Mark 16"},{"i":227,"m":8,"day":15,"iso":"2026-08-15","w":"Sa","p":"Job 25-26","s":"Luke 1"},{"i":228,"m":8,"day":16,"iso":"2026-08-16","w":"Su","p":"Job 27-28","s":"Luke 2"},{"i":229,"m":8,"day":17,"iso":"2026-08-17","w":"M","p":"Job 29-31","s":"Luke 3"},{"i":230,"m":8,"day":18,"iso":"2026-08-18","w":"Tu","p":"Job 32-33","s":"Luke 4"},{"i":231,"m":8,"day":19,"iso":"2026-08-19","w":"W","p":"Job 34-35","s":"Luke 5"},{"i":232,"m":8,"day":20,"iso":"2026-08-20","w":"Th","p":"Job 36-37","s":"Luke 6"},{"i":233,"m":8,"day":21,"iso":"2026-08-21","w":"F","p":"Job 38-39","s":"Luke 7"},{"i":234,"m":8,"day":22,"iso":"2026-08-22","w":"Sa","p":"Job 40-41","s":"Luke 8"},{"i":235,"m":8,"day":23,"iso":"2026-08-23","w":"Su","p":"Job 42","s":"Luke 9"},{"i":236,"m":8,"day":24,"iso":"2026-08-24","w":"M","p":"Ecclesiastes 1-2","s":"Luke 10"},{"i":237,"m":8,"day":25,"iso":"2026-08-25","w":"Tu","p":"Ecclesiastes 3-5","s":"Luke 11"},{"i":238,"m":8,"day":26,"iso":"2026-08-26","w":"W","p":"Ecclesiastes 6-7","s":"Luke 12"},{"i":239,"m":8,"day":27,"iso":"2026-08-27","w":"Th","p":"Ecclesiastes 8-9","s":"Luke 13"},{"i":240,"m":8,"day":28,"iso":"2026-08-28","w":"F","p":"Ecclesiastes 10-12","s":"Luke 14"},{"i":241,"m":8,"day":29,"iso":"2026-08-29","w":"Sa","p":"Song of Solomon 1-3","s":"Luke 15"},{"i":242,"m":8,"day":30,"iso":"2026-08-30","w":"Su","p":"Song of Solomon 4-6","s":"Luke 16"},{"i":243,"m":8,"day":31,"iso":"2026-08-31","w":"M","p":"Song of Solomon 7-8","s":"Luke 17"},{"i":244,"m":9,"day":1,"iso":"2026-09-01","w":"Tu","p":"Isaiah 1-2","s":"Luke 18"},{"i":245,"m":9,"day":2,"iso":"2026-09-02","w":"W","p":"Isaiah 3-4","s":"Luke 19"},{"i":246,"m":9,"day":3,"iso":"2026-09-03","w":"Th","p":"Isaiah 5-6","s":"Luke 20"},{"i":247,"m":9,"day":4,"iso":"2026-09-04","w":"F","p":"Isaiah 7-8","s":"Luke 21"},{"i":248,"m":9,"day":5,"iso":"2026-09-05","w":"Sa","p":"Isaiah 9-10","s":"Luke 22"},{"i":249,"m":9,"day":6,"iso":"2026-09-06","w":"Su","p":"Isaiah 11-12","s":"Luke 23"},{"i":250,"m":9,"day":7,"iso":"2026-09-07","w":"M","p":"Isaiah 13-14","s":"Luke 24"},{"i":251,"m":9,"day":8,"iso":"2026-09-08","w":"Tu","p":"Isaiah 15-16","s":"John 1"},{"i":252,"m":9,"day":9,"iso":"2026-09-09","w":"W","p":"Isaiah 17-18","s":"John 2"},{"i":253,"m":9,"day":10,"iso":"2026-09-10","w":"Th","p":"Isaiah 19-20","s":"John 3"},{"i":254,"m":9,"day":11,"iso":"2026-09-11","w":"F","p":"Isaiah 21-22","s":"John 4"},{"i":255,"m":9,"day":12,"iso":"2026-09-12","w":"Sa","p":"Isaiah 23-24","s":"John 5"},{"i":256,"m":9,"day":13,"iso":"2026-09-13","w":"Su","p":"Isaiah 25-26","s":"John 6"},{"i":257,"m":9,"day":14,"iso":"2026-09-14","w":"M","p":"Isaiah 27-28","s":"John 7"},{"i":258,"m":9,"day":15,"iso":"2026-09-15","w":"Tu","p":"Isaiah 29-30","s":"John 8"},{"i":259,"m":9,"day":16,"iso":"2026-09-16","w":"W","p":"Isaiah 31-32","s":"John 9"},{"i":260,"m":9,"day":17,"iso":"2026-09-17","w":"Th","p":"Isaiah 33-34","s":"John 10"},{"i":261,"m":9,"day":18,"iso":"2026-09-18","w":"F","p":"Isaiah 35-36","s":"John 11"},{"i":262,"m":9,"day":19,"iso":"2026-09-19","w":"Sa","p":"Isaiah 37-38","s":"John 12"},{"i":263,"m":9,"day":20,"iso":"2026-09-20","w":"Su","p":"Isaiah 39-40","s":"John 13"},{"i":264,"m":9,"day":21,"iso":"2026-09-21","w":"M","p":"Isaiah 41-42","s":"John 14"},{"i":265,"m":9,"day":22,"iso":"2026-09-22","w":"Tu","p":"Isaiah 43-44","s":"John 15"},{"i":266,"m":9,"day":23,"iso":"2026-09-23","w":"W","p":"Isaiah 45-46","s":"John 16"},{"i":267,"m":9,"day":24,"iso":"2026-09-24","w":"Th","p":"Isaiah 47-48","s":"John 17"},{"i":268,"m":9,"day":25,"iso":"2026-09-25","w":"F","p":"Isaiah 49-50","s":"John 18"},{"i":269,"m":9,"day":26,"iso":"2026-09-26","w":"Sa","p":"Isaiah 51-52","s":"John 19"},{"i":270,"m":9,"day":27,"iso":"2026-09-27","w":"Su","p":"Isaiah 53-54","s":"John 20"},{"i":271,"m":9,"day":28,"iso":"2026-09-28","w":"M","p":"Isaiah 55-56","s":"John 21"},{"i":272,"m":9,"day":29,"iso":"2026-09-29","w":"Tu","p":"Isaiah 57-58","s":"Acts 1"},{"i":273,"m":9,"day":30,"iso":"2026-09-30","w":"W","p":"Isaiah 59-60","s":"Acts 2"},{"i":274,"m":10,"day":1,"iso":"2026-10-01","w":"Th","p":"Isaiah 61-62","s":"Acts 3"},{"i":275,"m":10,"day":2,"iso":"2026-10-02","w":"F","p":"Isaiah 63-64","s":"Acts 4"},{"i":276,"m":10,"day":3,"iso":"2026-10-03","w":"Sa","p":"Isaiah 65-66","s":"Acts 5"},{"i":277,"m":10,"day":4,"iso":"2026-10-04","w":"Su","p":"Jeremiah 1-2","s":"Acts 6"},{"i":278,"m":10,"day":5,"iso":"2026-10-05","w":"M","p":"Jeremiah 3-4","s":"Acts 7"},{"i":279,"m":10,"day":6,"iso":"2026-10-06","w":"Tu","p":"Jeremiah 5-6","s":"Acts 8"},{"i":280,"m":10,"day":7,"iso":"2026-10-07","w":"W","p":"Jeremiah 7-8","s":"Acts 9"},{"i":281,"m":10,"day":8,"iso":"2026-10-08","w":"Th","p":"Jeremiah 9-10","s":"Acts 10"},{"i":282,"m":10,"day":9,"iso":"2026-10-09","w":"F","p":"Jeremiah 11-12","s":"Acts 11"},{"i":283,"m":10,"day":10,"iso":"2026-10-10","w":"Sa","p":"Jeremiah 13","s":"Acts 12"},{"i":284,"m":10,"day":11,"iso":"2026-10-11","w":"Su","p":"Jeremiah 14-15","s":"Acts 13"},{"i":285,"m":10,"day":12,"iso":"2026-10-12","w":"M","p":"Jeremiah 16-17","s":"Acts 14"},{"i":286,"m":10,"day":13,"iso":"2026-10-13","w":"Tu","p":"Jeremiah 18-20","s":"Acts 15"},{"i":287,"m":10,"day":14,"iso":"2026-10-14","w":"W","p":"Jeremiah 21-22","s":"Acts 16"},{"i":288,"m":10,"day":15,"iso":"2026-10-15","w":"Th","p":"Jeremiah 23-24","s":"Acts 17"},{"i":289,"m":10,"day":16,"iso":"2026-10-16","w":"F","p":"Jeremiah 25-26","s":"Acts 18"},{"i":290,"m":10,"day":17,"iso":"2026-10-17","w":"Sa","p":"Jeremiah 27","s":"Acts 19"},{"i":291,"m":10,"day":18,"iso":"2026-10-18","w":"Su","p":"Jeremiah 28-29","s":"Acts 20"},{"i":292,"m":10,"day":19,"iso":"2026-10-19","w":"M","p":"Jeremiah 30-31","s":"Acts 21"},{"i":293,"m":10,"day":20,"iso":"2026-10-20","w":"Tu","p":"Jeremiah 32-33","s":"Acts 22"},{"i":294,"m":10,"day":21,"iso":"2026-10-21","w":"W","p":"Jeremiah 34","s":"Acts 23"},{"i":295,"m":10,"day":22,"iso":"2026-10-22","w":"Th","p":"Jeremiah 35-36","s":"Acts 24"},{"i":296,"m":10,"day":23,"iso":"2026-10-23","w":"F","p":"Jeremiah 37-38","s":"Acts 25"},{"i":297,"m":10,"day":24,"iso":"2026-10-24","w":"Sa","p":"Jeremiah 39-40","s":"Acts 26"},{"i":298,"m":10,"day":25,"iso":"2026-10-25","w":"Su","p":"Jeremiah 41-42","s":"Acts 27"},{"i":299,"m":10,"day":26,"iso":"2026-10-26","w":"M","p":"Jeremiah 43-44","s":"Acts 28"},{"i":300,"m":10,"day":27,"iso":"2026-10-27","w":"Tu","p":"Jeremiah 45","s":"Romans 1"},{"i":301,"m":10,"day":28,"iso":"2026-10-28","w":"W","p":"Jeremiah 46-47","s":"Romans 2"},{"i":302,"m":10,"day":29,"iso":"2026-10-29","w":"Th","p":"Jeremiah 48-49","s":"Romans 3"},{"i":303,"m":10,"day":30,"iso":"2026-10-30","w":"F","p":"Jeremiah 50-51","s":"Romans 4"},{"i":304,"m":10,"day":31,"iso":"2026-10-31","w":"Sa","p":"Jeremiah 52","s":"Romans 5"},{"i":305,"m":11,"day":1,"iso":"2026-11-01","w":"Su","p":"Lamentations 1-2","s":"Romans 6"},{"i":306,"m":11,"day":2,"iso":"2026-11-02","w":"M","p":"Lamentations 3","s":"Romans 7"},{"i":307,"m":11,"day":3,"iso":"2026-11-03","w":"Tu","p":"Lamentations 4-5","s":"Romans 8"},{"i":308,"m":11,"day":4,"iso":"2026-11-04","w":"W","p":"Ezekiel 1","s":"Romans 9"},{"i":309,"m":11,"day":5,"iso":"2026-11-05","w":"Th","p":"Ezekiel 2-3","s":"Romans 10"},{"i":310,"m":11,"day":6,"iso":"2026-11-06","w":"F","p":"Ezekiel 4-6","s":"Romans 11"},{"i":311,"m":11,"day":7,"iso":"2026-11-07","w":"Sa","p":"Ezekiel 7-8","s":"Romans 12"},{"i":312,"m":11,"day":8,"iso":"2026-11-08","w":"Su","p":"Ezekiel 9-10","s":"Romans 13"},{"i":313,"m":11,"day":9,"iso":"2026-11-09","w":"M","p":"Ezekiel 11-12","s":"Romans 14"},{"i":314,"m":11,"day":10,"iso":"2026-11-10","w":"Tu","p":"Ezekiel 13-14","s":"Romans 15"},{"i":315,"m":11,"day":11,"iso":"2026-11-11","w":"W","p":"Ezekiel 15-16","s":"Romans 16"},{"i":316,"m":11,"day":12,"iso":"2026-11-12","w":"Th","p":"Ezekiel 17-18","s":"1 Corinthians 1"},{"i":317,"m":11,"day":13,"iso":"2026-11-13","w":"F","p":"Ezekiel 19-20","s":"1 Corinthians 2"},{"i":318,"m":11,"day":14,"iso":"2026-11-14","w":"Sa","p":"Ezekiel 21-22","s":"1 Corinthians 3"},{"i":319,"m":11,"day":15,"iso":"2026-11-15","w":"Su","p":"Ezekiel 23-24","s":"1 Corinthians 4"},{"i":320,"m":11,"day":16,"iso":"2026-11-16","w":"M","p":"Ezekiel 25","s":"1 Corinthians 5"},{"i":321,"m":11,"day":17,"iso":"2026-11-17","w":"Tu","p":"Ezekiel 26-27","s":"1 Corinthians 6"},{"i":322,"m":11,"day":18,"iso":"2026-11-18","w":"W","p":"Ezekiel 28-30","s":"1 Corinthians 7"},{"i":323,"m":11,"day":19,"iso":"2026-11-19","w":"Th","p":"Ezekiel 31-32","s":"1 Corinthians 8"},{"i":324,"m":11,"day":20,"iso":"2026-11-20","w":"F","p":"Ezekiel 33-35","s":"1 Corinthians 9"},{"i":325,"m":11,"day":21,"iso":"2026-11-21","w":"Sa","p":"Ezekiel 36-37","s":"1 Corinthians 10"},{"i":326,"m":11,"day":22,"iso":"2026-11-22","w":"Su","p":"Ezekiel 38-39","s":"1 Corinthians 11"},{"i":327,"m":11,"day":23,"iso":"2026-11-23","w":"M","p":"Ezekiel 40-41","s":"1 Corinthians 12"},{"i":328,"m":11,"day":24,"iso":"2026-11-24","w":"Tu","p":"Ezekiel 42-43","s":"1 Corinthians 13"},{"i":329,"m":11,"day":25,"iso":"2026-11-25","w":"W","p":"Ezekiel 44-45","s":"1 Corinthians 14"},{"i":330,"m":11,"day":26,"iso":"2026-11-26","w":"Th","p":"Ezekiel 46-47","s":"1 Corinthians 15"},{"i":331,"m":11,"day":27,"iso":"2026-11-27","w":"F","p":"Ezekiel 48","s":"1 Corinthians 16"},{"i":332,"m":11,"day":28,"iso":"2026-11-28","w":"Sa","p":"Daniel 1-2","s":"2 Corinthians 1"},{"i":333,"m":11,"day":29,"iso":"2026-11-29","w":"Su","p":"Daniel 3-4","s":"2 Corinthians 2"},{"i":334,"m":11,"day":30,"iso":"2026-11-30","w":"M","p":"Daniel 5-6","s":"2 Corinthians 3"},{"i":335,"m":12,"day":1,"iso":"2026-12-01","w":"Tu","p":"Daniel 7-8","s":"2 Corinthians 4"},{"i":336,"m":12,"day":2,"iso":"2026-12-02","w":"W","p":"Daniel 9-10","s":"2 Corinthians 5"},{"i":337,"m":12,"day":3,"iso":"2026-12-03","w":"Th","p":"Daniel 11-12","s":"2 Corinthians 6"},{"i":338,"m":12,"day":4,"iso":"2026-12-04","w":"F","p":"Hosea 1-3","s":"2 Corinthians 7"},{"i":339,"m":12,"day":5,"iso":"2026-12-05","w":"Sa","p":"Hosea 4-6","s":"2 Corinthians 8"},{"i":340,"m":12,"day":6,"iso":"2026-12-06","w":"Su","p":"Hosea 7","s":"2 Corinthians 9"},{"i":341,"m":12,"day":7,"iso":"2026-12-07","w":"M","p":"Hosea 8-10","s":"2 Corinthians 10"},{"i":342,"m":12,"day":8,"iso":"2026-12-08","w":"Tu","p":"Hosea 11-12","s":"2 Corinthians 11"},{"i":343,"m":12,"day":9,"iso":"2026-12-09","w":"W","p":"Hosea 13-14","s":"2 Corinthians 12"},{"i":344,"m":12,"day":10,"iso":"2026-12-10","w":"Th","p":"Joel 1-3","s":"2 Corinthians 13"},{"i":345,"m":12,"day":11,"iso":"2026-12-11","w":"F","p":"Amos 1-2","s":"Galatians 1"},{"i":346,"m":12,"day":12,"iso":"2026-12-12","w":"Sa","p":"Amos 3-5","s":"Galatians 2"},{"i":347,"m":12,"day":13,"iso":"2026-12-13","w":"Su","p":"Amos 6-7","s":"Galatians 3"},{"i":348,"m":12,"day":14,"iso":"2026-12-14","w":"M","p":"Amos 8-9","s":"Galatians 4"},{"i":349,"m":12,"day":15,"iso":"2026-12-15","w":"Tu","p":"Obadiah","s":"Galatians 5"},{"i":350,"m":12,"day":16,"iso":"2026-12-16","w":"W","p":"Jonah 1-4","s":"Galatians 6"},{"i":351,"m":12,"day":17,"iso":"2026-12-17","w":"Th","p":"Micah 1-2","s":"Ephesians 1"},{"i":352,"m":12,"day":18,"iso":"2026-12-18","w":"F","p":"Micah 3-5","s":"Ephesians 2"},{"i":353,"m":12,"day":19,"iso":"2026-12-19","w":"Sa","p":"Micah 6-7","s":"Ephesians 3"},{"i":354,"m":12,"day":20,"iso":"2026-12-20","w":"Su","p":"Nahum 1-3","s":"Ephesians 4"},{"i":355,"m":12,"day":21,"iso":"2026-12-21","w":"M","p":"Habakkuk 1-3","s":"Ephesians 5"},{"i":356,"m":12,"day":22,"iso":"2026-12-22","w":"Tu","p":"Zephaniah 1-3","s":"Ephesians 6"},{"i":357,"m":12,"day":23,"iso":"2026-12-23","w":"W","p":"Haggai 1-2","s":"Philippians 1"},{"i":358,"m":12,"day":24,"iso":"2026-12-24","w":"Th","p":"Zechariah 1-2","s":"Philippians 2"},{"i":359,"m":12,"day":25,"iso":"2026-12-25","w":"F","p":"Zechariah 3-5","s":"Philippians 3"},{"i":360,"m":12,"day":26,"iso":"2026-12-26","w":"Sa","p":"Zechariah 6-7","s":"Philippians 4"},{"i":361,"m":12,"day":27,"iso":"2026-12-27","w":"Su","p":"Zechariah 8-10","s":"Colossians 1"},{"i":362,"m":12,"day":28,"iso":"2026-12-28","w":"M","p":"Zechariah 11-12","s":"Colossians 2"},{"i":363,"m":12,"day":29,"iso":"2026-12-29","w":"Tu","p":"Zechariah 13-14","s":"Colossians 3"},{"i":364,"m":12,"day":30,"iso":"2026-12-30","w":"W","p":"Malachi 1-2","s":"Colossians 4"},{"i":365,"m":12,"day":31,"iso":"2026-12-31","w":"Th","p":"Malachi 3-4","s":"Psalm 91"}];
+
+// Sample devotional video data tied to specific dates
+const VIDEOS = {
+  "2026-05-27": {who:"Pastor Justin", title:"Wisdom At The Throne", len:"5:42"},
+  "2026-05-26": {who:"Hannah from Worship", title:"Where Mercy Begins", len:"6:18"},
+  "2026-05-25": {who:"Elder Marcus", title:"The Cost of the Crown", len:"4:55"},
+  "2026-05-24": {who:"Sarah, Womens Ministry", title:"When David Bowed", len:"6:02"},
+  "2026-05-23": {who:"Pastor Justin", title:"Mighty Men, Faithful God", len:"7:14"},
+  "2026-05-22": {who:"Mike, Mens Pastor", title:"Songs From The Cave", len:"5:33"},
+  "2026-05-21": {who:"Bri, Youth Director", title:"Friendship That Forms You", len:"4:48"},
+};
+
+// Sermon clips (Hear It) keyed by Monday-of-week ISO. Each ties to that week's reading.
+const SERMONS = {
+  "2026-05-25": {pastor:"Pastor Justin", title:"Wisdom or Want", text:"1 Kings 3", len:"38:12", date:"Sun May 24"},
+  "2026-05-18": {pastor:"Pastor Justin", title:"Mercy in the Mess", text:"2 Samuel 12", len:"42:08", date:"Sun May 17"},
+  "2026-05-11": {pastor:"Pastor Justin", title:"Songs From The Cave", text:"1 Samuel 22-24", len:"36:54", date:"Sun May 10"},
+  "2026-05-04": {pastor:"Pastor Justin", title:"After God's Own Heart", text:"1 Samuel 13-16", len:"40:22", date:"Sun May 3"},
+  "2026-05-25-default":{pastor:"Pastor Justin", title:"From this week's reading", text:"This week", len:"35:00", date:"Sunday"},
+};
+
+// Sample journal prompts and prayer prompts per book
+const PROMPTS = {
+  "Genesis":"Where does God's creative order show up in your own life this week? What needs to be re-ordered?",
+  "Exodus":"Pharaoh is anywhere God's people are kept from worship. What 'Pharaoh' are you tolerating right now?",
+  "Leviticus":"What does it look like for you to be set apart in your specific workplace, family, or city this week?",
+  "Numbers":"Where are you tempted to grumble instead of trust? Be specific.",
+  "Deuteronomy":"What is one command you've been treating as optional?",
+  "Joshua":"What 'land' has God told you to take that you're still circling?",
+  "Judges":"What pattern in your life looks like the cycle of Judges? What breaks it?",
+  "Ruth":"Where is God writing covenant loyalty into a relationship you have?",
+  "1 Samuel":"David spent years in the cave before the throne. What is your cave right now and what is it forming in you?",
+  "2 Samuel":"Where do you need to lay down a kingdom of your own making?",
+  "1 Kings":"Solomon asked for wisdom. What would you ask God for if you could ask for one thing?",
+  "2 Kings":"What kind of king or leader are you becoming in your home, work, ministry?",
+  "1 Chronicles":"What are you building that will outlast you?",
+  "2 Chronicles":"Where do you need a personal revival, not a national one?",
+  "Ezra":"What needs to be rebuilt that you've left in ruins?",
+  "Nehemiah":"Who is on your wall with you right now? Who do you need to invite?",
+  "Esther":"What 'such a time as this' are you in?",
+  "Job":"Where is God meeting you in suffering rather than removing it?",
+  "Psalm":"Pray this Psalm back to God in your own words. Don't edit your honesty.",
+  "Proverbs":"Pick one proverb from today and live it before the day ends.",
+  "Ecclesiastes":"What 'under the sun' pursuit have you been chasing? What would 'above the sun' look like?",
+  "Song of Solomon":"How is Christ pursuing you the way the lover pursues the beloved?",
+  "Isaiah":"What 'high and lifted up' picture of God do you need today?",
+  "Jeremiah":"What word from God do you need to deliver even if it's not received?",
+  "Lamentations":"What grief have you not given language to yet?",
+  "Ezekiel":"What dry bones in your life or city need the breath of God?",
+  "Daniel":"Where do you need Daniel's resolve this week?",
+  "Hosea":"How is God's covenant love pursuing you back?",
+  "Joel":"What needs to be rent — your garment, or your heart?",
+  "Amos":"Where have you confused worship with justice or vice versa?",
+  "Obadiah":"Where are you tempted to gloat instead of grieve?",
+  "Jonah":"What 'Nineveh' are you running from?",
+  "Micah":"Walk humbly. Do justice. Love mercy. Which one is the hardest for you right now?",
+  "Nahum":"Where do you need to remember that God is a stronghold?",
+  "Habakkuk":"What 'how long, O Lord' is in your mouth right now?",
+  "Zephaniah":"Where do you need to be quieted by His love?",
+  "Haggai":"What's been left unfinished that God is asking you to return to?",
+  "Zechariah":"Not by might, not by power, but by My Spirit. Where are you striving in your own strength?",
+  "Malachi":"What needs to be honored that you've been treating casually?",
+  "Matthew":"Where is the Kingdom breaking in around you that you haven't named yet?",
+  "Mark":"Mark moves fast. What is Jesus asking you to do — immediately?",
+  "Luke":"Who is the 'outsider' Jesus would have your attention on this week?",
+  "John":"What 'I AM' statement of Jesus do you most need to receive today?",
+  "Acts":"What would the early church do with your week?",
+  "Romans":"What gospel truth do you need to preach to yourself this morning?",
+  "1 Corinthians":"Where is the cross showing up as foolishness in your life?",
+  "2 Corinthians":"How is God using a weakness to display His strength?",
+  "Galatians":"Where are you tempted to add to grace?",
+  "Ephesians":"Sit with who you are 'in Christ' for five minutes. Write what surfaces.",
+  "Philippians":"Where do you need to choose joy on purpose?",
+  "Colossians":"What is above that you need to set your mind on?",
+};
+
+const PRAY = {
+  "default":"Lord, anchor what I just read into how I move today. Make me a doer of the Word, not a hearer only.",
+  "Psalm":"Father, I make these words my prayer. Hear me. Search me. Steady me.",
+};
+
+const STUDY_GUIDES = {
+  // Keyed by week-of-year (Mon as week start) → guide content
+  // For prototype, build dynamically per current week
+};
+
+// STATE
+let state = {
+  view: "auth",
+  role: "member",
+  today: "2026-05-27",
+  activeDate: "2026-05-27",
+  viewWeek: "2026-05-25", // Monday of week being browsed in Groups
+  completed: {}, // iso → {read:true, watch:true, journal:true, pray:true}
+  streak: 12,
+  journal: {},  // iso → text
+  group: "Sunday Night Group · West Omaha",
+  groupMeetingDay: "Wednesday · 7:00 PM",
+  rsvp: {}, // monday iso → "yes"/"no"/null
+};
+
+// Mocked completion for past week so the UX shows progress
+function seedDemo(){
+  const seed = ["2026-05-20","2026-05-21","2026-05-22","2026-05-23","2026-05-24","2026-05-25","2026-05-26"];
+  seed.forEach(d => state.completed[d] = {read:true,watch:true,journal:true,pray:true});
+}
+seedDemo();
+
+// Helpers
+function findReading(iso){ return READINGS.find(r => r.iso === iso); }
+function bookOf(passage){
+  const m = passage.match(/^(\d?\s?[A-Za-z ]+?)\s+\d/);
+  return m ? m[1].trim() : passage.split(' ')[0];
+}
+function promptFor(reading){
+  const b = bookOf(reading.p);
+  return PROMPTS[b] || PROMPTS[bookOf(reading.s)] || "What stood out to you? Where is God speaking?";
+}
+function prayerFor(reading){
+  const b = bookOf(reading.p);
+  if (b.includes("Psalm")) return PRAY["Psalm"];
+  return PRAY["default"];
+}
+function videoFor(iso){
+  return VIDEOS[iso] || {who:"Love Church Teaching Team", title:"Devotional for "+iso, len:"5:00"};
+}
+function shortDay(iso){
+  const d = new Date(iso+"T12:00:00");
+  return d.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'});
+}
+function longDay(iso){
+  const d = new Date(iso+"T12:00:00");
+  return d.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+function isoOffset(iso, days){
+  const d = new Date(iso+"T12:00:00");
+  d.setDate(d.getDate()+days);
+  return d.toISOString().slice(0,10);
+}
+function startOfWeek(iso){
+  const d = new Date(iso+"T12:00:00");
+  const day = d.getDay(); // 0=Sun
+  const diff = day === 0 ? -6 : 1 - day; // make Monday week-start
+  d.setDate(d.getDate()+diff);
+  return d.toISOString().slice(0,10);
+}
+function isComplete(iso){
+  const c = state.completed[iso];
+  if (!c) return false;
+  return c.read && c.watch && c.journal && c.pray;
+}
+function pctYear(){
+  const total = 365;
+  const done = Object.keys(state.completed).filter(isComplete).length;
+  return Math.round((done/total)*100);
+}
+
+// NAV
+function go(view, opts){
+  state.view = view;
+  if (opts && opts.date) state.activeDate = opts.date;
+  render();
+}
+function toggleRole(){
+  state.role = state.role === "member" ? "leader" : "member";
+  state.viewWeek = startOfWeek(state.today);
+  state.view = state.role === "leader" ? "groups" : "today";
+  render();
+}
+function resetState(){
+  state.completed = {};
+  state.journal = {};
+  state.streak = 0;
+  seedDemo();
+  state.streak = 12;
+  render();
+}
+
+// COMPLETION
+function markDone(iso, key){
+  if (!state.completed[iso]) state.completed[iso] = {};
+  state.completed[iso][key] = true;
+  render();
+}
+
+// =====================================
+// SCREENS
+// =====================================
+
+function screenAuth(){
+  return `
+  <div class="auth-wrap">
+    <div style="text-align:center;padding-top:40px">
+      <div style="position:relative;display:inline-block">
+        <div class="display" style="font-size:64px;color:var(--ink)">WE ARE<br>SELF-<br>FED</div>
+        <div class="badge-circle" style="position:absolute;top:-8px;right:-44px">Experience God's Best For Your Life <span class="arrow-down">↓</span></div>
+      </div>
+      <p class="label" style="margin-top:18px">Intimacy with God Through His Word</p>
+    </div>
+    <div>
+      <div class="auth-buttons">
+        <button class="btn btn-apple" onclick="go('today')">
+           Continue with Apple
+        </button>
+        <button class="btn btn-google" onclick="go('today')">
+          G  Continue with Google
+        </button>
+        <button class="btn btn-outline" onclick="go('today')">
+          Continue with Email
+        </button>
+      </div>
+      <p class="small center mt-4">Love Church Omaha · lovechurch.org</p>
+    </div>
+  </div>`;
+}
+
+function screenToday(){
+  const r = findReading(state.today);
+  const v = videoFor(state.today);
+  const c = state.completed[state.today] || {};
+  const pillarsDone = ['read','watch','journal','pray'].filter(k=>c[k]).length;
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="flex between aic mb-2">
+      <div>
+        <div class="label">${r.w === 'Su' ? 'Sunday' : 'Today'}</div>
+        <div class="h1">${longDay(r.iso).split(',')[0].toUpperCase()}<br><span style="color:var(--pink)">${r.p.toUpperCase()}</span></div>
+      </div>
+      <div class="ring">
+        ${ringSvg(pillarsDone/4)}
+        <div class="ringval">${pillarsDone}/4</div>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar ${c.read?'done':''} ${!c.read?'active':''}"><span class="n">01</span>Study</div>
+      <div class="pillar ${c.watch?'done':''}"><span class="n">02</span>Hear</div>
+      <div class="pillar ${c.journal?'done':''}"><span class="n">03</span>Apply</div>
+      <div class="pillar ${c.pray?'done':''}"><span class="n">04</span>Pray</div>
+    </div>
+
+    <div class="card mt-4" style="padding:0;overflow:hidden">
+      <div class="video" onclick="markDone('${r.iso}','watch'); go('video')">
+        <div class="play"></div>
+        <div class="meta">
+          <div class="who">${v.who} · ${v.len}</div>
+          <div class="title">${v.title}</div>
+        </div>
+      </div>
+      <div style="padding:18px 20px">
+        <div class="label">Today's Devo</div>
+        <div class="body mt-2">A 5-minute reflection from our team on this week's reading. Tap to watch.</div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="flex between aic">
+        <div>
+          <div class="label">Reading</div>
+          <div class="h3 mt-2">${r.p}</div>
+          <div class="small mt-2">Secondary · ${r.s}</div>
+        </div>
+        <button class="btn btn-pink btn-sm" style="width:auto" onclick="markDone('${r.iso}','read'); go('reading')">Open</button>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-3">
+      <div class="quick ${c.journal?'done':''}" onclick="go('journal')">
+        <div class="ico">✎</div>
+        <div class="lbl">Journal</div>
+      </div>
+      <div class="quick ${c.pray?'done':''}" onclick="go('pray')">
+        <div class="ico">⏶</div>
+        <div class="lbl">Pray</div>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="label mb-3">This Week</div>
+      ${weekStrip()}
+    </div>
+
+    <div class="card mt-4" onclick="goGroups()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div class="label" style="color:var(--pink)">This Week's Group</div>
+        <div class="h3 mt-2">${state.groupMeetingDay}</div>
+        <div class="small mt-2">View outline · Hear It clip · Discussion</div>
+      </div>
+      <div style="font-size:22px;color:var(--ink)">›</div>
+    </div>
+
+    <div class="card mt-3" onclick="go('journal-archive')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div class="label">Journal</div>
+        <div class="h3 mt-2">Past entries</div>
+        <div class="small mt-2">${Object.keys(state.journal).length} entries</div>
+      </div>
+      <div style="font-size:22px;color:var(--ink)">›</div>
+    </div>
+
+    <button class="btn btn-primary mt-6" onclick="markAllDone()" ${pillarsDone===4?'disabled':''}>
+      ${pillarsDone===4 ? 'Complete · Day finished' : 'Mark today complete'}
+    </button>
+  </div>
+  ${bottomNav('today')}
+  `;
+}
+
+function markAllDone(){
+  const iso = state.today;
+  state.completed[iso] = {read:true,watch:true,journal:true,pray:true};
+  render();
+}
+
+function headerBar(){
+  return `
+  <div class="topbar">
+    <div>
+      <div class="label">Self-Fed · ${state.role === 'leader' ? 'Leader' : '2026'}</div>
+      <div class="date">${longDay(state.today)}</div>
+    </div>
+    <div class="streak">
+      <div class="dot"></div>
+      ${state.streak} day streak
+    </div>
+  </div>`;
+}
+
+function ringSvg(pct){
+  const r=28, c=2*Math.PI*r;
+  const off = c - c*pct;
+  return `<svg width="64" height="64">
+    <circle cx="32" cy="32" r="${r}" stroke="#DDD9D0" stroke-width="6" fill="none"/>
+    <circle cx="32" cy="32" r="${r}" stroke="#EC2F8A" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/>
+  </svg>`;
+}
+
+function weekStrip(){
+  const monday = startOfWeek(state.today);
+  const labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  let html = `<div class="week">`;
+  for (let i=0;i<7;i++){
+    const iso = isoOffset(monday, i);
+    const d = new Date(iso+"T12:00:00");
+    const isToday = iso === state.today;
+    const done = isComplete(iso);
+    html += `<div class="wd ${isToday?'today':''} ${done?'done':''}" onclick="go('day',{date:'${iso}'})">
+      <div class="d">${labels[i]}</div>
+      <div class="n">${d.getDate()}</div>
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function screenReading(){
+  const r = findReading(state.activeDate);
+  return `
+  ${headerBack('Today','today')}
+  <div class="scroll">
+    <div class="label">Day ${r.i} of 365</div>
+    <div class="h1 mt-2">${r.p.toUpperCase()}</div>
+    <div class="flex gap-2 mt-3">
+      <span class="pill ink">Primary</span>
+      <span class="pill">Secondary · ${r.s}</span>
+    </div>
+    <hr class="dash"/>
+    <div class="verse"><span class="num">1</span>In the beginning God created the heavens and the earth.</div>
+    <div class="verse"><span class="num">2</span>The earth was without form, and void; and darkness was on the face of the deep. And the Spirit of God was hovering over the face of the waters.</div>
+    <div class="verse"><span class="num">3</span>Then God said, "Let there be light"; and there was light.</div>
+    <div class="body" style="font-style:italic;color:var(--muted);font-size:12px;margin:8px 0">— Scripture pulled from NKJV via Bible API in production. This is sample text for the prototype.</div>
+    <div class="verse"><span class="num">…</span><em style="color:var(--muted)">Full chapter renders here. User can swipe between primary and secondary readings.</em></div>
+
+    <div class="card-dark mt-6">
+      <div class="label" style="color:var(--pink)">Done reading?</div>
+      <div class="h3 mt-2" style="color:var(--cream)">Next: today's devotional video</div>
+      <button class="btn btn-pink mt-4" onclick="markDone('${r.iso}','read'); go('video')">Watch the devo</button>
+    </div>
+  </div>
+  `;
+}
+
+function screenVideo(){
+  const r = findReading(state.activeDate);
+  const v = videoFor(r.iso);
+  return `
+  ${headerBack('Today','today')}
+  <div class="scroll">
+    <div class="label">Day ${r.i} · Devotional</div>
+    <div class="h2 mt-2">${v.title.toUpperCase()}</div>
+    <div class="small mt-2">${v.who} · ${v.len}</div>
+
+    <div class="video mt-4">
+      <div class="play"></div>
+      <div class="meta">
+        <div class="who">${v.who}</div>
+        <div class="title">${v.title}</div>
+      </div>
+    </div>
+
+    <div class="body mt-4">
+      A short reflection from our church family on today's reading from <strong>${r.p}</strong>. Each day a different voice. Each day the same Word.
+    </div>
+
+    <div class="card mt-4">
+      <div class="label">Today's Reading</div>
+      <div class="h3 mt-2">${r.p}</div>
+      <div class="small mt-2">Secondary · ${r.s}</div>
+    </div>
+
+    <button class="btn btn-primary mt-6" onclick="markDone('${r.iso}','watch'); go('journal')">Done · Move to Journal</button>
+  </div>
+  `;
+}
+
+function screenJournal(){
+  const r = findReading(state.activeDate);
+  const prompt = promptFor(r);
+  const existing = state.journal[r.iso] || "";
+  return `
+  ${headerBack('Today','today')}
+  <div class="scroll">
+    <div class="label">Day ${r.i} · Apply It</div>
+    <div class="h2 mt-2">JOURNAL</div>
+    <div class="card-pink mt-3">
+      <div class="label" style="color:rgba(255,255,255,.7)">Today's Prompt</div>
+      <div class="h3 mt-2" style="color:#fff">${prompt}</div>
+    </div>
+    <textarea id="journal-input" rows="10" class="mt-3" placeholder="Write what God is speaking…">${existing}</textarea>
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-outline" style="flex:1" onclick="go('journal-archive')">Past entries</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveJournal('${r.iso}')">Save · ${state.completed[r.iso]?.journal ? 'Saved' : 'Mark done'}</button>
+    </div>
+  </div>
+  `;
+}
+
+function saveJournal(iso){
+  const txt = document.getElementById('journal-input').value;
+  state.journal[iso] = txt;
+  markDone(iso,'journal');
+}
+
+function screenJournalArchive(){
+  const entries = Object.entries(state.journal).sort((a,b)=>b[0].localeCompare(a[0]));
+  return `
+  ${headerBack('Journal','journal')}
+  <div class="scroll">
+    <div class="label">Archive</div>
+    <div class="h2 mt-2">PAST ENTRIES</div>
+    ${entries.length === 0 ? `<div class="body mt-4">No entries yet. Your journal builds up as you go.</div>` :
+      entries.map(([iso,txt])=>`
+      <div class="card mt-3">
+        <div class="label">${longDay(iso)}</div>
+        <div class="small mt-2">${findReading(iso)?.p || ''}</div>
+        <div class="body mt-3">${txt.length > 200 ? txt.slice(0,200)+'…' : txt}</div>
+      </div>`).join('')}
+  </div>
+  `;
+}
+
+function screenPray(){
+  const r = findReading(state.activeDate);
+  const prayer = prayerFor(r);
+  return `
+  ${headerBack('Today','today')}
+  <div class="scroll">
+    <div class="label">Day ${r.i} · Pray</div>
+    <div class="h2 mt-2">PRAYER</div>
+    <div class="card-dark mt-3">
+      <div class="label" style="color:var(--pink)">Pray From Today's Word</div>
+      <div class="body mt-3" style="color:var(--cream);font-size:16px;line-height:1.55">${prayer}</div>
+    </div>
+    <div class="card mt-3">
+      <div class="label">From ${r.p}</div>
+      <div class="body mt-2">Linger on a single verse. Read it slowly. Pray it back.</div>
+    </div>
+    <button class="btn btn-primary mt-6" onclick="markDone('${r.iso}','pray'); go('today')">Amen · Mark prayed</button>
+  </div>
+  `;
+}
+
+function screenDay(){
+  const r = findReading(state.activeDate);
+  if (!r) return `<div class="scroll"><p>Day not found.</p></div>`;
+  const c = state.completed[r.iso] || {};
+  return `
+  ${headerBack('Plan','plan')}
+  <div class="scroll">
+    <div class="label">${r.w} · Day ${r.i}</div>
+    <div class="h1 mt-2">${longDay(r.iso).toUpperCase()}</div>
+    <div class="card mt-4">
+      <div class="label">Primary</div>
+      <div class="h3 mt-2">${r.p}</div>
+      <div class="label mt-4">Secondary</div>
+      <div class="h3 mt-2">${r.s}</div>
+    </div>
+    <div class="grid-2 mt-3">
+      <div class="quick ${c.read?'done':''}" onclick="go('reading',{date:'${r.iso}'})"><div class="ico">📖</div><div class="lbl">Read</div></div>
+      <div class="quick ${c.watch?'done':''}" onclick="go('video',{date:'${r.iso}'})"><div class="ico">▶</div><div class="lbl">Watch</div></div>
+      <div class="quick ${c.journal?'done':''}" onclick="go('journal',{date:'${r.iso}'})"><div class="ico">✎</div><div class="lbl">Journal</div></div>
+      <div class="quick ${c.pray?'done':''}" onclick="go('pray',{date:'${r.iso}'})"><div class="ico">⏶</div><div class="lbl">Pray</div></div>
+    </div>
+  </div>
+  `;
+}
+
+function screenPlan(){
+  // Calendar view of currently active month
+  const r = findReading(state.activeDate);
+  const month = new Date(state.activeDate+"T12:00:00").getMonth()+1;
+  const year = 2026;
+  const days = new Date(year, month, 0).getDate();
+  const firstDow = new Date(year, month-1, 1).getDay(); // 0 Sun
+  const monthName = new Date(year,month-1,1).toLocaleString('en-US',{month:'long'});
+
+  let cells = '';
+  // Header
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(h=>cells+=`<div class="h">${h}</div>`);
+  // Empties before first day (Mon-week)
+  const shift = firstDow === 0 ? 6 : firstDow - 1;
+  for (let i=0;i<shift;i++) cells += `<div class="d empty"></div>`;
+  for (let d=1; d<=days; d++){
+    const iso = `2026-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const done = isComplete(iso);
+    const isToday = iso === state.today;
+    const isFuture = iso > state.today;
+    cells += `<div class="d ${done?'done':''} ${isToday?'today':''} ${isFuture?'future':''}" onclick="go('day',{date:'${iso}'})">${d}</div>`;
+  }
+
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="label">2026 Reading Guide</div>
+    <div class="h1 mt-2">WE ARE<br><span style="color:var(--pink)">SELF-FED</span></div>
+    <div class="small mt-2">Intimacy with God through His Word · ${pctYear()}% complete</div>
+
+    <div class="month-nav mt-4">
+      <button onclick="changeMonth(-1)">‹</button>
+      <div class="h2">${monthName.toUpperCase()}</div>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal">${cells}</div>
+
+    <div class="card mt-6">
+      <div class="label">The Rhythm</div>
+      <div class="h3 mt-2">01 · Study It</div>
+      <div class="small mt-2">Daily reading guide through the entire Bible.</div>
+      <div class="h3 mt-3">02 · Discuss It</div>
+      <div class="small mt-2">Weekly groups discussing what we're reading.</div>
+      <div class="h3 mt-3">03 · Hear It</div>
+      <div class="small mt-2">Teaching team shares from the previous week's reading.</div>
+      <div class="h3 mt-3">04 · Apply It</div>
+      <div class="small mt-2">Live out Scripture by being sent into your community.</div>
+    </div>
+  </div>
+  ${bottomNav('plan')}
+  `;
+}
+
+function changeMonth(dir){
+  const d = new Date(state.activeDate+"T12:00:00");
+  d.setMonth(d.getMonth()+dir);
+  if (d.getFullYear() < 2026) { state.activeDate = '2026-01-01'; render(); return; }
+  if (d.getFullYear() > 2026) { state.activeDate = '2026-12-31'; render(); return; }
+  state.activeDate = d.toISOString().slice(0,10);
+  render();
+}
+
+function screenProfile(){
+  const totalDone = Object.keys(state.completed).filter(isComplete).length;
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="label">Profile</div>
+    <div class="h1 mt-2">YOU'RE<br>SELF-FED.</div>
+    <div class="card mt-4">
+      <div class="flex between aic">
+        <div>
+          <div class="h3">Kap Chatfield</div>
+          <div class="small mt-2">kap@kapchatfield.com</div>
+          <div class="pill ink mt-3">${state.group}</div>
+        </div>
+        <div class="av" style="width:54px;height:54px;border-radius:50%;background:var(--pink);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px">K</div>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-3">
+      <div class="card-pink"><div class="label" style="color:rgba(255,255,255,.7)">Streak</div><div class="h2 mt-2" style="color:#fff">${state.streak}</div><div class="small" style="color:rgba(255,255,255,.7)">days</div></div>
+      <div class="card-dark"><div class="label" style="color:var(--pink)">Days Done</div><div class="h2 mt-2" style="color:var(--cream)">${totalDone}/365</div><div class="small" style="color:rgba(232,229,222,.6)">${pctYear()}% of year</div></div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="row" onclick="toggleRole()" style="cursor:pointer">
+        <div class="left">
+          <div>
+            <div class="h3">Group Leader Mode</div>
+            <div class="small mt-2">Open auto-generated study guides</div>
+          </div>
+        </div>
+        <div class="pill ${state.role==='leader'?'pink':''}">${state.role==='leader'?'On':'Off'}</div>
+      </div>
+      <div class="row">
+        <div class="left"><div><div class="h3">Notifications</div><div class="small mt-2">Daily 6:30 AM nudge</div></div></div>
+        <div class="pill pink">On</div>
+      </div>
+      <div class="row">
+        <div class="left"><div><div class="h3">Translation</div><div class="small mt-2">Default for in-app reading</div></div></div>
+        <div class="pill">NKJV</div>
+      </div>
+      <div class="row">
+        <div class="left"><div><div class="h3">Group</div><div class="small mt-2">${state.group}</div></div></div>
+        <div class="pill">Change</div>
+      </div>
+    </div>
+
+    <button class="btn btn-outline mt-6" onclick="go('auth')">Sign out</button>
+  </div>
+  ${bottomNav('profile')}
+  `;
+}
+
+function bottomNav(active){
+  if (state.role === 'leader'){
+    return `
+    <div class="nav">
+      <button class="navbtn ${active==='today'?'active':''}" onclick="go('today')">
+        <div class="navico">●</div>Today
+      </button>
+      <button class="navbtn ${active==='groups'?'active':''}" onclick="goGroups()">
+        <div class="navico">◈</div>Groups
+      </button>
+      <button class="navbtn ${active==='leader-roster'?'active':''}" onclick="go('leader-roster')">
+        <div class="navico">⚇</div>Roster
+      </button>
+      <button class="navbtn ${active==='profile'?'active':''}" onclick="go('profile')">
+        <div class="navico">◉</div>Profile
+      </button>
+    </div>`;
+  }
+  return `
+  <div class="nav">
+    <button class="navbtn ${active==='today'?'active':''}" onclick="go('today')">
+      <div class="navico">●</div>Today
+    </button>
+    <button class="navbtn ${active==='plan'?'active':''}" onclick="go('plan')">
+      <div class="navico">▦</div>Plan
+    </button>
+    <button class="navbtn ${active==='groups'?'active':''}" onclick="goGroups()">
+      <div class="navico">◈</div>Groups
+    </button>
+    <button class="navbtn ${active==='profile'?'active':''}" onclick="go('profile')">
+      <div class="navico">◉</div>Profile
+    </button>
+  </div>`;
+}
+
+function goGroups(){
+  // Default to current week when opening Groups
+  state.viewWeek = startOfWeek(state.today);
+  go('groups');
+}
+
+function shiftViewWeek(dir){
+  state.viewWeek = isoOffset(state.viewWeek, dir * 7);
+  // Clamp to 2026
+  if (state.viewWeek < '2025-12-29') state.viewWeek = '2025-12-29';
+  if (state.viewWeek > '2026-12-28') state.viewWeek = '2026-12-28';
+  render();
+}
+
+function rsvpWeek(monday, ans){
+  state.rsvp[monday] = ans;
+  render();
+}
+
+function headerBack(label, dest){
+  return `
+  <div class="topbar">
+    <button class="btn-ghost" style="background:none;border:none;padding:0;font-weight:700;font-size:13px;cursor:pointer" onclick="go('${dest}')">‹ ${label}</button>
+    <div class="streak"><div class="dot"></div>${state.streak} day streak</div>
+  </div>`;
+}
+
+// ===== LEADER SCREENS =====
+
+function buildWeekGuide(mondayParam){
+  const monday = mondayParam || startOfWeek(state.today);
+  const weekDays = [];
+  for (let i=0;i<7;i++){
+    const iso = isoOffset(monday,i);
+    const r = findReading(iso);
+    if (r) weekDays.push(r);
+  }
+  if (weekDays.length === 0) return null;
+
+  // Pull first primary book this week as theme
+  const themeBook = bookOf(weekDays[0].p);
+
+  return {
+    monday: monday,
+    weekRange: `${shortDay(monday)} – ${shortDay(isoOffset(monday,6))}`,
+    days: weekDays,
+    theme: themeBook,
+    sermon: SERMONS[monday] || null,
+    openingQ: `Before we open the Word together: where did God meet you in ${themeBook} this week?`,
+    keyVerse: `${weekDays[3] ? weekDays[3].p : weekDays[0].p}`,
+    questions: [
+      `What did you read this week that you couldn't unsee?`,
+      `Where is God's character most visible in ${themeBook}? Where is it hardest to see?`,
+      `Pick one verse from this week's reading. Why that one?`,
+      `Where in your life is this reading exposing something? Name it specifically.`,
+      `What is one obedience step you take in the next 7 days because of what you read?`,
+      `Who needs to hear what God said to you this week?`
+    ],
+    application: `Before you leave tonight, name your one obedience step. Text someone in this group between now and Sunday with how it went.`,
+    prayer: `Father, we are not consumers of Your Word. We are doers. Send us this week with what we just received. In Jesus' name.`,
+  };
+}
+
+// Unified Groups screen — members see read-only, leaders see edit controls
+function screenGroups(){
+  const monday = state.viewWeek || startOfWeek(state.today);
+  const g = buildWeekGuide(monday);
+  if (!g) return `${headerBar()}<div class="scroll"><div class="label">Groups</div><div class="h1 mt-2">NO READING<br>THIS WEEK</div></div>${bottomNav('groups')}`;
+
+  const isCurrent = monday === startOfWeek(state.today);
+  const isFuture = monday > startOfWeek(state.today);
+  const isPast = monday < startOfWeek(state.today);
+  const rsvp = state.rsvp[monday];
+  const isLeader = state.role === 'leader';
+
+  // Hear It teaching clip
+  const sermon = g.sermon || {pastor:"Pastor Justin", title:`From ${g.theme}`, text:g.theme, len:"35:00", date:"Sunday"};
+
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="label">${state.group}</div>
+    <div class="h1 mt-2">GROUP<br><span style="color:var(--pink)">OUTLINE</span></div>
+    <div class="small mt-2">${state.groupMeetingDay} · 8 members</div>
+
+    <div class="card mt-4" style="display:flex;justify-content:space-between;align-items:center">
+      <button class="btn-ghost" style="background:none;border:none;font-size:22px;cursor:pointer;padding:6px 10px" onclick="shiftViewWeek(-1)">‹</button>
+      <div class="center">
+        <div class="label">${isPast?'Past week':isFuture?'Coming up':'This week'}</div>
+        <div class="h3 mt-2">${g.weekRange}</div>
+        <div class="small mt-2">Theme · ${g.theme}</div>
+      </div>
+      <button class="btn-ghost" style="background:none;border:none;font-size:22px;cursor:pointer;padding:6px 10px" onclick="shiftViewWeek(1)">›</button>
+    </div>
+
+    ${!isPast ? `
+    <div class="flex gap-2 mt-3">
+      <button class="btn ${rsvp==='yes'?'btn-pink':'btn-outline'} btn-sm" onclick="rsvpWeek('${monday}','yes')">I'll be there</button>
+      <button class="btn ${rsvp==='no'?'btn-primary':'btn-outline'} btn-sm" onclick="rsvpWeek('${monday}','no')">Can't make it</button>
+    </div>` : ''}
+
+    <div class="card mt-4" style="padding:0;overflow:hidden">
+      <div class="video">
+        <div class="play"></div>
+        <div class="meta">
+          <div class="who">${sermon.pastor} · ${sermon.len} · ${sermon.date}</div>
+          <div class="title">${sermon.title}</div>
+        </div>
+      </div>
+      <div style="padding:16px 18px">
+        <div class="label" style="color:var(--pink)">03 · Hear It</div>
+        <div class="body mt-2">Last Sunday's message on ${sermon.text}. Watch before group.</div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="label">This Week's Readings</div>
+      ${g.days.map(d=>{
+        const done = isComplete(d.iso);
+        return `<div class="row" onclick="go('day',{date:'${d.iso}'})" style="cursor:pointer">
+          <div class="left">
+            <div class="av" style="background:${done?'var(--pink)':'var(--cream-2)'};color:${done?'#fff':'var(--ink)'}">${d.w}</div>
+            <div>
+              <div class="h3" style="font-size:13px">${d.p}</div>
+              <div class="small">${d.s}</div>
+            </div>
+          </div>
+          <div class="small">${d.m}/${d.day}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card-dark mt-4">
+      <div class="label" style="color:var(--pink)">Open</div>
+      <div class="body mt-3" style="color:var(--cream);font-size:15px;line-height:1.5">${g.openingQ}</div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="label">02 · Discuss It</div>
+      <div style="margin-top:12px">
+        ${g.questions.map((q,i)=>`<div class="q"><strong style="color:var(--pink)">${String(i+1).padStart(2,'0')}.</strong> ${q}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card-pink mt-3">
+      <div class="label" style="color:rgba(255,255,255,.75)">04 · Apply It</div>
+      <div class="body mt-3" style="color:#fff;font-size:15px;line-height:1.5">${g.application}</div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="label">Close in Prayer</div>
+      <div class="body mt-2" style="font-style:italic">${g.prayer}</div>
+    </div>
+
+    ${isLeader ? `
+    <hr class="dash"/>
+    <div class="label">Leader Tools</div>
+    <div class="grid-2 mt-3">
+      <button class="btn btn-outline btn-sm" onclick="alert('In production: edit any field of this outline for your group.')">Edit outline</button>
+      <button class="btn btn-outline btn-sm" onclick="go('study-guide')">Print view</button>
+    </div>
+    <div class="card mt-3">
+      <div class="label">Leader Notes (private)</div>
+      <textarea rows="4" class="mt-2" placeholder="Pre-group prep, prayer requests, follow-ups…"></textarea>
+    </div>
+    <div class="card mt-3">
+      <div class="label">Group attendance · ${g.weekRange.split('–')[0].trim()}</div>
+      <div style="margin-top:10px">${memberRows()}</div>
+    </div>
+    <button class="btn btn-primary mt-4" onclick="alert('In production: submit weekly report to church staff with prayer requests + attendance.')">Submit weekly report</button>
+    ` : `
+    <div class="card mt-4">
+      <div class="label">Coming Up</div>
+      <div class="h3 mt-2">${state.groupMeetingDay}</div>
+      <div class="small mt-2">Your group meets at ${state.group.split('·')[1] ? state.group.split('·')[1].trim() : 'location TBD'}.</div>
+    </div>`}
+  </div>
+  ${bottomNav('groups')}
+  `;
+}
+
+function screenLeaderDash(){
+  const g = buildWeekGuide();
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="label">Group Leader · ${state.group}</div>
+    <div class="h1 mt-2">THIS WEEK'S<br><span style="color:var(--pink)">STUDY GUIDE</span></div>
+    <div class="small mt-2">Auto-built from this week's readings. No prep required.</div>
+
+    <div class="card mt-4">
+      <div class="label">Week of</div>
+      <div class="h3 mt-2">${g.weekRange}</div>
+      <div class="small mt-2">Theme · ${g.theme}</div>
+      <button class="btn btn-pink mt-4" onclick="go('study-guide')">Open full guide</button>
+    </div>
+
+    <div class="card-dark mt-3">
+      <div class="label" style="color:var(--pink)">Opening Question</div>
+      <div class="body mt-2" style="color:var(--cream)">${g.openingQ}</div>
+    </div>
+
+    <div class="mt-6">
+      <div class="label mb-3">Your Group · 8 members</div>
+      ${memberRows()}
+    </div>
+
+    <div class="card mt-6">
+      <div class="label">Reported to staff</div>
+      <div class="h3 mt-2">3 prayer requests this week</div>
+      <button class="btn btn-outline btn-sm mt-3" style="width:auto">Submit weekly report</button>
+    </div>
+  </div>
+  ${bottomNav('leader-dash')}
+  `;
+}
+
+function memberRows(){
+  const members = [
+    {n:"Mark Davidson", up:true, last:"Tue"},
+    {n:"Jenny Pham", up:true, last:"Wed"},
+    {n:"Tomás Reyes", up:false, last:"Sun"},
+    {n:"Brittany Cole", up:true, last:"Wed"},
+    {n:"Asher Knox", up:true, last:"Wed"},
+    {n:"Mia Owens", up:false, last:"Mon"},
+    {n:"Levi Hart", up:true, last:"Tue"},
+    {n:"Renee Park", up:true, last:"Wed"},
+  ];
+  return `<div class="card">${members.map(m=>`
+    <div class="row">
+      <div class="left">
+        <div class="av">${m.n.split(' ').map(x=>x[0]).join('')}</div>
+        <div>
+          <div class="h3" style="font-size:14px">${m.n}</div>
+          <div class="small">Last read · ${m.last}</div>
+        </div>
+      </div>
+      <div class="pill ${m.up?'pink':''}">${m.up?'On track':'Behind'}</div>
+    </div>`).join('')}</div>`;
+}
+
+function screenStudyGuide(){
+  const g = buildWeekGuide(state.viewWeek || startOfWeek(state.today));
+  return `
+  ${headerBack('Groups','groups')}
+  <div class="scroll">
+    <div class="guide">
+      <h4>Week of ${g.weekRange}</h4>
+      <h1>${g.theme.toUpperCase()}<br><span style="color:var(--pink)">STUDY GUIDE</span></h1>
+
+      <h5>This Week's Readings</h5>
+      ${g.days.map(d=>`<p>· <strong>${d.w} ${d.day}/${d.m}</strong> — ${d.p} <span style="color:var(--muted)">/ ${d.s}</span></p>`).join('')}
+
+      <h5>Open</h5>
+      <div class="q">${g.openingQ}</div>
+
+      <h5>Discussion</h5>
+      ${g.questions.map((q,i)=>`<div class="q"><strong style="color:var(--pink)">${String(i+1).padStart(2,'0')}.</strong> ${q}</div>`).join('')}
+
+      <h5>Application</h5>
+      <p>${g.application}</p>
+
+      <h5>Close in Prayer</h5>
+      <p style="font-style:italic">${g.prayer}</p>
+    </div>
+
+    <div class="grid-2 mt-4">
+      <button class="btn btn-outline btn-sm" onclick="alert('In production: export as PDF for printing or email to your co-leader.')">Export PDF</button>
+      <button class="btn btn-primary btn-sm" onclick="alert('In production: share to your group thread via SMS or in-app message.')">Share</button>
+    </div>
+
+    <div class="card mt-3">
+      <div class="label">Leader Notes</div>
+      <textarea rows="5" placeholder="Notes for next week, prayer requests, follow-ups…"></textarea>
+    </div>
+  </div>
+  `;
+}
+
+function screenLeaderRoster(){
+  return `
+  ${headerBar()}
+  <div class="scroll">
+    <div class="label">Group Roster</div>
+    <div class="h1 mt-2">YOUR<br>PEOPLE</div>
+    <div class="small mt-2">${state.group} · 8 members</div>
+    <div class="mt-4">${memberRows()}</div>
+    <button class="btn btn-primary mt-6" onclick="alert('In production: add a member from your church directory.')">Add member</button>
+  </div>
+  ${bottomNav('leader-roster')}
+  `;
+}
+
+// ====== ROUTER ======
+function render(){
+  const app = document.getElementById('app');
+  let html = '';
+  switch(state.view){
+    case 'auth': html = screenAuth(); break;
+    case 'today': html = screenToday(); break;
+    case 'reading': html = screenReading(); break;
+    case 'video': html = screenVideo(); break;
+    case 'journal': html = screenJournal(); break;
+    case 'journal-archive': html = screenJournalArchive(); break;
+    case 'pray': html = screenPray(); break;
+    case 'day': html = screenDay(); break;
+    case 'plan': html = screenPlan(); break;
+    case 'profile': html = screenProfile(); break;
+    case 'groups': html = screenGroups(); break;
+    case 'leader-dash': state.view = 'groups'; html = screenGroups(); break;
+    case 'study-guide': html = screenStudyGuide(); break;
+    case 'leader-roster': html = screenLeaderRoster(); break;
+    default: html = screenToday();
+  }
+  app.innerHTML = html;
+  app.scrollTop = 0;
+}
+
+// Start
+render();
+</script>
+</body>
+</html>

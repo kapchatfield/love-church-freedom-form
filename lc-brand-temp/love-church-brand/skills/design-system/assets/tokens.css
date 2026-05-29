@@ -1,0 +1,208 @@
+/*
+ * Love Church Design System — CSS variables
+ * Mirror of skills/design-system/assets/tokens.json. Update both in sync.
+ * Drop into MailChimp custom CSS, lovechurch.org theme, or Subsplash custom theming.
+ *
+ * Owner: adam@lovechurch.org
+ * Last updated: 2026-05-05
+ */
+
+:root {
+  /* ────────────────────────────────────────────────────────────────
+   * COLOR — Neutral core
+   * ──────────────────────────────────────────────────────────────── */
+  --lc-ink:        #151515;  /* Near-black. Primary type, rules. */
+  --lc-cream:      #EEE4D3;  /* Primary cream — default page background. */
+  --lc-paper:      #F3F1E5;  /* Off-white paper — alt body background. */
+  --lc-taupe:      #B5A090;  /* Warm taupe bridge — TOC, muted panels. */
+  --lc-taupe-deep: #A39584;  /* Deeper taupe — Annual TOC weight. */
+
+  /* COLOR — Loud accent */
+  --lc-pink-loud:  #F0238D;  /* THE accent. Year pills, stats, lead copy. */
+  --lc-pink-soft:  #F49DC3;  /* Soft pink — story covers, secondary tints. */
+
+  /* COLOR — Sunday Slides expanded (category / event graphics only) */
+  --lc-orange:     #E27440;
+  --lc-yellow:     #D9C44A;
+  --lc-blue:       #557EA1;
+  --lc-green:      #5E7A56;
+  --lc-gold:       #C9A24A;
+
+  /* COLOR — Semantic */
+  --lc-bg:           var(--lc-cream);
+  --lc-bg-inverse:   var(--lc-ink);
+  --lc-bg-emphasis:  var(--lc-pink-loud);
+  --lc-fg:           var(--lc-ink);
+  --lc-fg-inverse:   var(--lc-cream);
+  --lc-fg-emphasis:  var(--lc-pink-loud);
+  --lc-rule:         var(--lc-ink);
+
+  /* ────────────────────────────────────────────────────────────────
+   * TYPOGRAPHY
+   * ──────────────────────────────────────────────────────────────── */
+  --lc-font-display: "Neue Haas Grotesk Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --lc-font-accent:  "Apple Garamond", "Garamond", "EB Garamond", serif;
+
+  /* Weight */
+  --lc-fw-thin:    100;
+  --lc-fw-light:   300;
+  --lc-fw-roman:   400;
+  --lc-fw-medium:  500;
+  --lc-fw-bold:    700;
+  --lc-fw-black:   900;
+
+  /* Size — editorial scale */
+  --lc-fs-display-1:  96px;  /* Cover headline */
+  --lc-fs-display-2:  72px;  /* Section opener */
+  --lc-fs-headline-1: 56px;  /* IG carousel cover, web hero */
+  --lc-fs-headline-2: 40px;  /* Story page headline */
+  --lc-fs-title:      28px;  /* Sub-section */
+  --lc-fs-lead:       22px;  /* Pink lead paragraph, pull quote */
+  --lc-fs-body:       18px;  /* Default body */
+  --lc-fs-body-tight: 16px;  /* Two-column body, email */
+  --lc-fs-caption:    14px;  /* Labels, footer */
+  --lc-fs-micro:      12px;  /* Stat labels, page numbers */
+
+  /* Tracking — letter-spacing in em */
+  --lc-tracking-display-tight:   -0.030em;  /* Display1 — heroic */
+  --lc-tracking-display-default: -0.020em;  /* Display2 / headline caps */
+  --lc-tracking-body:             0;
+  --lc-tracking-caption:          0.060em;  /* Section labels in caps */
+
+  /* Leading */
+  --lc-lh-display-tight: 0.92;  /* Stacked display caps */
+  --lc-lh-headline:      1.05;
+  --lc-lh-body:          1.45;
+  --lc-lh-tight:         1.20;
+
+  /* ────────────────────────────────────────────────────────────────
+   * SPACING (4-base)
+   * ──────────────────────────────────────────────────────────────── */
+  --lc-space-xs:  4px;
+  --lc-space-sm:  8px;
+  --lc-space-md:  16px;
+  --lc-space-lg:  24px;
+  --lc-space-xl:  32px;
+  --lc-space-2xl: 48px;
+  --lc-space-3xl: 64px;
+  --lc-space-4xl: 96px;
+  --lc-space-5xl: 128px;
+
+  /* ────────────────────────────────────────────────────────────────
+   * RADII / RULES
+   * ──────────────────────────────────────────────────────────────── */
+  --lc-radius-none: 0;
+  --lc-radius-sm:   4px;
+  --lc-radius-md:   8px;
+  --lc-radius-pill: 9999px;
+
+  --lc-rule-hairline: 1px;
+  --lc-rule-regular:  1.5px;
+  --lc-rule-bold:     3px;
+
+  /* ────────────────────────────────────────────────────────────────
+   * MOTION
+   * ──────────────────────────────────────────────────────────────── */
+  --lc-dur-fast:    150ms;
+  --lc-dur-base:    240ms;
+  --lc-dur-slow:    400ms;
+  --lc-dur-ambient: 800ms;
+
+  --lc-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --lc-ease-emphasis: cubic-bezier(0.3, 0, 0, 1);
+  --lc-ease-linear:   cubic-bezier(0, 0, 1, 1);
+}
+
+/* Dark mode — invert background, keep accent. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lc-bg:         var(--lc-ink);
+    --lc-fg:         var(--lc-cream);
+    --lc-fg-inverse: var(--lc-ink);
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ * UTILITY COMPOSITES
+ * Drop these classes into MailChimp, the website, or any HTML
+ * surface to inherit on-system type.
+ * ──────────────────────────────────────────────────────────────── */
+
+.lc-display-1 {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-black);
+  font-size: var(--lc-fs-display-1);
+  line-height: var(--lc-lh-display-tight);
+  letter-spacing: var(--lc-tracking-display-tight);
+  text-transform: uppercase;
+}
+
+.lc-display-2 {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-black);
+  font-size: var(--lc-fs-display-2);
+  line-height: var(--lc-lh-display-tight);
+  letter-spacing: var(--lc-tracking-display-default);
+  text-transform: uppercase;
+}
+
+.lc-lead {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-bold);
+  font-size: var(--lc-fs-lead);
+  line-height: var(--lc-lh-body);
+  color: var(--lc-fg-emphasis);   /* The pink-on-cream lead pattern */
+}
+
+.lc-body {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-roman);
+  font-size: var(--lc-fs-body);
+  line-height: var(--lc-lh-body);
+}
+
+.lc-accent-italic {
+  font-family: var(--lc-font-accent);
+  font-style: italic;
+  font-weight: var(--lc-fw-roman);
+}
+
+.lc-caption {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-bold);
+  font-size: var(--lc-fs-caption);
+  letter-spacing: var(--lc-tracking-caption);
+  text-transform: uppercase;
+}
+
+/* The signature pill — year badge, CTA pill */
+.lc-pill {
+  display: inline-block;
+  padding: var(--lc-space-sm) var(--lc-space-lg);
+  background: var(--lc-pink-loud);
+  color: var(--lc-fg-inverse);
+  border-radius: var(--lc-radius-pill);
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-bold);
+  font-size: var(--lc-fs-caption);
+  letter-spacing: var(--lc-tracking-caption);
+  text-transform: uppercase;
+}
+
+/* The stat block — huge number + tiny caps label */
+.lc-stat-number {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-black);
+  font-size: var(--lc-fs-display-2);
+  line-height: 1;
+}
+
+.lc-stat-label {
+  font-family: var(--lc-font-display);
+  font-weight: var(--lc-fw-bold);
+  font-size: var(--lc-fs-micro);
+  letter-spacing: var(--lc-tracking-caption);
+  text-transform: uppercase;
+  color: currentColor;
+  opacity: 0.8;
+}

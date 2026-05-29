@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-Fed Group One-Pagers · Week of June 1, 2026 · Love Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=EB+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lc-ink: #151515;
+    --lc-cream: #EEE4D3;
+    --lc-paper: #F3F1E5;
+    --lc-taupe: #B5A090;
+    --lc-taupe-deep: #A39584;
+    --lc-pink-loud: #F0238D;
+    --lc-pink-soft: #F49DC3;
+    --lc-blue: #557EA1;
+    --lc-green: #5E7A56;
+    --lc-gold: #C9A24A;
+    --lc-font-display: "Neue Haas Grotesk Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --lc-font-accent: "Apple Garamond", "EB Garamond", "Garamond", serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: #DDD4C4;
+    color: var(--lc-ink);
+    font-family: var(--lc-font-display);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Swipe nav */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--lc-ink);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+  }
+  .nav-tab {
+    background: transparent;
+    color: var(--lc-cream);
+    border: 1.5px solid var(--lc-cream);
+    padding: 8px 20px;
+    font-family: var(--lc-font-display);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .nav-tab:hover { background: var(--lc-cream); color: var(--lc-ink); }
+  .nav-tab.active { background: var(--lc-pink-loud); border-color: var(--lc-pink-loud); color: var(--lc-cream); }
+  .nav-arrows {
+    display: flex;
+    gap: 8px;
+    margin-left: 12px;
+  }
+  .nav-arrows button {
+    background: transparent;
+    color: var(--lc-cream);
+    border: 1.5px solid var(--lc-cream);
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .nav-arrows button:hover { background: var(--lc-cream); color: var(--lc-ink); }
+
+  /* Page container */
+  .stage {
+    padding: 32px 16px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  /* One-pager card. Sized to print clean on 8.5x11. */
+  .sheet {
+    display: none;
+    width: 100%;
+    max-width: 850px;
+    background: var(--lc-cream);
+    color: var(--lc-ink);
+    padding: 36px 44px 32px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    border: 1.5px solid var(--lc-ink);
+    border-radius: 6px;
+    position: relative;
+  }
+  .sheet.active { display: block; }
+
+  /* Header */
+  .sheet-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--lc-ink);
+    margin-bottom: 18px;
+  }
+  .pill {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lc-cream);
+    margin-bottom: 8px;
+  }
+  .pill.valor { background: var(--lc-blue); }
+  .pill.agape { background: var(--lc-pink-loud); }
+  .pill.mixed { background: var(--lc-green); }
+  .sheet-title {
+    font-weight: 900;
+    font-size: 42px;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .sheet-meta {
+    text-align: right;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .sheet-meta strong { color: var(--lc-pink-loud); }
+  .sheet-meta .week {
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: var(--lc-ink);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* Block style */
+  .block-label {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lc-pink-loud);
+    margin: 0 0 6px;
+  }
+
+  /* Context */
+  .context {
+    margin-bottom: 18px;
+  }
+  .context-body {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .context-body strong { font-weight: 700; }
+  .context-body .scripture {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Question tiers. 3 column. */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .tier {
+    background: var(--lc-paper);
+    border: 1px solid var(--lc-ink);
+    padding: 14px 14px 16px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tier-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--lc-taupe);
+    padding-bottom: 6px;
+  }
+  .tier-num {
+    background: var(--lc-ink);
+    color: var(--lc-cream);
+    font-weight: 900;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+  }
+  .tier-name {
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tier-tag {
+    margin-left: auto;
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-size: 10.5px;
+    color: var(--lc-taupe-deep);
+  }
+  .tier ol {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+  .tier li { margin-bottom: 5px; }
+
+  /* 5S reveal */
+  .fives {
+    margin-bottom: 18px;
+    background: var(--lc-paper);
+    border: 1px solid var(--lc-ink);
+    border-radius: 4px;
+    padding: 14px 16px 14px;
+  }
+  .fives-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--lc-taupe);
+  }
+  .fives-title {
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .fives-sub {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--lc-taupe-deep);
+  }
+  .fives-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .five-cell {
+    border-left: 2px solid var(--lc-pink-loud);
+    padding: 2px 0 2px 8px;
+  }
+  .five-name {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .five-text {
+    font-size: 10.5px;
+    line-height: 1.4;
+  }
+
+  /* Leader assessment */
+  .assess {
+    border: 1.5px dashed var(--lc-ink);
+    padding: 12px 14px 12px;
+    border-radius: 4px;
+  }
+  .assess-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--lc-taupe);
+    padding-bottom: 4px;
+  }
+  .assess-title {
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .assess-hint {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-size: 10.5px;
+    color: var(--lc-taupe-deep);
+  }
+  .assess-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .assess-cell .label {
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lc-pink-loud);
+    margin-bottom: 2px;
+  }
+  .assess-cell .question {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-size: 10.5px;
+    line-height: 1.35;
+    margin-bottom: 6px;
+    color: var(--lc-ink);
+    min-height: 28px;
+  }
+  .write-line {
+    border-bottom: 1px solid var(--lc-ink);
+    height: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Footer */
+  .sheet-foot {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--lc-ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .sheet-foot .submit {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 11px;
+    color: var(--lc-pink-loud);
+  }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    .sheet { padding: 24px 20px; }
+    .sheet-title { font-size: 30px; }
+    .sheet-head { grid-template-columns: 1fr; }
+    .sheet-meta { text-align: left; }
+    .tiers { grid-template-columns: 1fr; }
+    .fives-grid { grid-template-columns: 1fr 1fr; }
+    .assess-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; }
+    .nav-bar { display: none; }
+    .stage { padding: 0; }
+    .sheet {
+      display: none;
+      box-shadow: none;
+      border: none;
+      max-width: none;
+      width: 100%;
+      padding: 24px 30px;
+      page-break-after: always;
+      border-radius: 0;
+    }
+    .sheet.active { display: block; }
+    .print-all .sheet { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-bar" role="tablist" aria-label="Group guide swipe">
+  <button class="nav-tab active" data-target="valor" role="tab" aria-selected="true">Valor · Men</button>
+  <button class="nav-tab" data-target="agape" role="tab">Agape · Women</button>
+  <button class="nav-tab" data-target="mixed" role="tab">Mixed / Married</button>
+  <div class="nav-arrows" aria-label="Previous and next">
+    <button id="prev" aria-label="Previous guide">&larr;</button>
+    <button id="next" aria-label="Next guide">&rarr;</button>
+  </div>
+</nav>
+
+<main class="stage">
+
+  <!-- ─────────────────────────── VALOR ─────────────────────────── -->
+  <article class="sheet active" id="valor" data-index="0">
+    <header class="sheet-head">
+      <div>
+        <span class="pill valor">Valor · Men's Group</span>
+        <h1 class="sheet-title">Men of Valor</h1>
+      </div>
+      <div class="sheet-meta">
+        <strong>Week of</strong>
+        <span class="week">Jun 1–7</span>
+        Self-Fed · 1 Kings 17–19
+      </div>
+    </header>
+
+    <!-- Context -->
+    <section class="context">
+      <p class="block-label">Context · What this text is about</p>
+      <p class="context-body">Israel is divided. Ahab is king. Baal worship is the cultural default. <strong>Elijah</strong> is the lone prophet God raises into this moment. In three chapters he goes from hiddenness at the brook, to a widow's last meal, to fire from heaven on Mt. Carmel, to a suicidal crash under a broom tree, to the still small voice at Horeb. The reading is the most honest portrait of male spiritual life in the Old Testament. <span class="scripture">"The LORD, He is God!"</span> on Tuesday and <span class="scripture">"It is enough! Now, LORD, take my life"</span> on Wednesday. Both are in the same man.</p>
+    </section>
+
+    <!-- Tiers -->
+    <section class="tiers">
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">01</span>
+          <span class="tier-name">Beginner</span>
+          <span class="tier-tag">new to the Word</span>
+        </div>
+        <ol>
+          <li>What stood out to you in the reading this week, even if you can't say why yet?</li>
+          <li>Elijah goes from a huge win to wanting to die in one chapter. Has your week ever looked like that?</li>
+          <li>God fed Elijah with bread and water before He sent him back. What basic thing in your life is God trying to feed you right now?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">02</span>
+          <span class="tier-name">Intermediate</span>
+          <span class="tier-tag">walking with God</span>
+        </div>
+        <ol>
+          <li>Elijah was formed in hiddenness at Cherith before he stood at Carmel. Where is God hiding you right now, and what is being formed?</li>
+          <li>Why do you think God was not in the wind, earthquake, or fire? What does that tell you about how you've been listening?</li>
+          <li>Where are you faking Carmel-level faith publicly while running scared privately?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">03</span>
+          <span class="tier-name">Advanced</span>
+          <span class="tier-tag">leading others</span>
+        </div>
+        <ol>
+          <li>Elijah said, "I alone am left." God answered, "Seven thousand have not bowed." How is isolation lying to you about the size of God's faithful remnant in your sphere?</li>
+          <li>When you crashed last, did you let God minister bread, sleep, voice, and recommission, in that order, or did you skip steps to get back on stage?</li>
+          <li>Who is your Elisha? Who are you handing the mantle to, and what does double-portion ministry require of you now?</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 5S reveal -->
+    <section class="fives">
+      <div class="fives-head">
+        <h2 class="fives-title">How the 5S Life reveals itself in 1 Kings 17–19</h2>
+        <span class="fives-sub">one text, all five</span>
+      </div>
+      <div class="fives-grid">
+        <div class="five-cell">
+          <div class="five-name">Surrendered</div>
+          <div class="five-text">Elijah at Cherith. Hidden, dependent on ravens, surrendered before he is sent.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Surrounded</div>
+          <div class="five-text">"Seven thousand have not bowed." Elijah was not alone. Neither are you.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Spirit-Led</div>
+          <div class="five-text">Fire falls at Carmel by prayer, not strategy. The Spirit answers what man cannot.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Self-Fed</div>
+          <div class="five-text">An angel feeds him twice before forty days at Horeb. Without that bread, no journey.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Sent</div>
+          <div class="five-text">After the whisper, God sends him back. Anoint kings. Call Elisha. The cave is not the end.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leader Assessment -->
+    <section class="assess">
+      <div class="assess-head">
+        <h2 class="assess-title">Leader · Group Health Check</h2>
+        <span class="assess-hint">share with your group coach this week</span>
+      </div>
+      <div class="assess-grid">
+        <div class="assess-cell">
+          <div class="label">Surrendered</div>
+          <div class="question">Are the men daily yielding to God before yielding to their phones?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Surrounded</div>
+          <div class="question">Are they known by name in this group, or still showing up performing?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Spirit-Led</div>
+          <div class="question">Is prayer functional or formative? Are we letting the Spirit lead the room?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Self-Fed</div>
+          <div class="question">Did the men actually read this week, or only show up to talk about it?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sheet-foot">
+      <span>Love Church · Self-Fed Group · v0.1</span>
+      <span class="submit">Pass this sheet to your small group coach</span>
+      <span>lovechurch.org</span>
+    </footer>
+  </article>
+
+  <!-- ─────────────────────────── AGAPE ─────────────────────────── -->
+  <article class="sheet" id="agape" data-index="1">
+    <header class="sheet-head">
+      <div>
+        <span class="pill agape">Agape · Women's Group</span>
+        <h1 class="sheet-title">Women of Agape</h1>
+      </div>
+      <div class="sheet-meta">
+        <strong>Week of</strong>
+        <span class="week">Jun 1–7</span>
+        Self-Fed · 1 Kings 17–19
+      </div>
+    </header>
+
+    <section class="context">
+      <p class="block-label">Context · What this text is about</p>
+      <p class="context-body">Two women anchor this passage and they are nothing alike. <strong>Jezebel</strong> sits on a throne and weaponizes her position to take. The <strong>widow of Zarephath</strong> is unnamed, foreign, and down to her last meal. God hides Elijah at her house, not at the palace. She feeds the prophet first. The bin of flour never runs out. Her son dies and is raised. By chapter's end, the most powerless woman in the region is the one whose home becomes the proof of God's provision. <span class="scripture">"The jar of oil will not run dry."</span></p>
+    </section>
+
+    <section class="tiers">
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">01</span>
+          <span class="tier-name">Beginner</span>
+          <span class="tier-tag">new to the Word</span>
+        </div>
+        <ol>
+          <li>What part of the widow's story did you feel in your gut?</li>
+          <li>If a stranger asked you for your last meal, would you give it? Be honest, not spiritual.</li>
+          <li>Where do you feel like you have just a "handful of flour" right now?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">02</span>
+          <span class="tier-name">Intermediate</span>
+          <span class="tier-tag">walking with God</span>
+        </div>
+        <ol>
+          <li>The widow is never named. What does it form in you that God chooses an unnamed woman to be the proof of His provision?</li>
+          <li>God asked her to feed Elijah <strong>first</strong>, before herself and her son. Where is God asking you to give first this week before you have proof you have enough?</li>
+          <li>Jezebel and the widow live in the same kingdom. Which posture is winning in your home right now: take, or release?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">03</span>
+          <span class="tier-name">Advanced</span>
+          <span class="tier-tag">leading others</span>
+        </div>
+        <ol>
+          <li>The widow's faith made her household the staging ground of revival. What would it cost you to let your home become that, and who in your life is the prophet you'd be feeding?</li>
+          <li>Where has Jezebel's script (control, manipulation, image) crept into your leadership, even subtly, and what's the repentance?</li>
+          <li>Who is the unnamed woman in your sphere that God is calling you to honor, mentor, or position this season?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="fives">
+      <div class="fives-head">
+        <h2 class="fives-title">How the 5S Life reveals itself in 1 Kings 17–19</h2>
+        <span class="fives-sub">one text, all five</span>
+      </div>
+      <div class="fives-grid">
+        <div class="five-cell">
+          <div class="five-name">Surrendered</div>
+          <div class="five-text">The widow surrenders her last meal first. Surrender is what you do before you see the supply.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Surrounded</div>
+          <div class="five-text">She is unnamed but not alone. God places a prophet in her house. He places friends in yours.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Spirit-Led</div>
+          <div class="five-text">She listens to a stranger because she discerns the Lord's voice through him. So must we.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Self-Fed</div>
+          <div class="five-text">The bin of flour does not run out. Daily bread, daily Word, daily portion. Not stockpiled, given.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Sent</div>
+          <div class="five-text">Her household becomes the staging ground for resurrection. Your home is sent before your platform is.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="assess">
+      <div class="assess-head">
+        <h2 class="assess-title">Leader · Group Health Check</h2>
+        <span class="assess-hint">share with your group coach this week</span>
+      </div>
+      <div class="assess-grid">
+        <div class="assess-cell">
+          <div class="label">Surrendered</div>
+          <div class="question">Are the women releasing control, or quietly running the room with anxiety?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Surrounded</div>
+          <div class="question">Is anyone here still unnamed? Who needs to be drawn in by name this week?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Spirit-Led</div>
+          <div class="question">Are we discerning the Spirit's leading or just being nice and tidy with the time?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Self-Fed</div>
+          <div class="question">Did they show up having read the passage, or expecting to be fed by the leader?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sheet-foot">
+      <span>Love Church · Self-Fed Group · v0.1</span>
+      <span class="submit">Pass this sheet to your small group coach</span>
+      <span>lovechurch.org</span>
+    </footer>
+  </article>
+
+  <!-- ─────────────────────────── MIXED / MARRIED ─────────────────────────── -->
+  <article class="sheet" id="mixed" data-index="2">
+    <header class="sheet-head">
+      <div>
+        <span class="pill mixed">Mixed · Married Group</span>
+        <h1 class="sheet-title">Covenant Under Pressure</h1>
+      </div>
+      <div class="sheet-meta">
+        <strong>Week of</strong>
+        <span class="week">Jun 1–7</span>
+        Self-Fed · 1 Kings 17–21
+      </div>
+    </header>
+
+    <section class="context">
+      <p class="block-label">Context · What this text is about</p>
+      <p class="context-body">Two households in the same kingdom. <strong>Ahab and Jezebel</strong> pull each other deeper into Baal worship and engineer the murder of a faithful neighbor to seize his vineyard. <strong>Naboth</strong> keeps the inheritance of his fathers and dies for it. Meanwhile <strong>Elijah</strong>, exhausted and alone, hears God remind him he is not alone. Married life happens inside a culture pulling toward Jezebel's script. The text is asking your household one question: <span class="scripture">"What inheritance will your household refuse to sell?"</span></p>
+    </section>
+
+    <section class="tiers">
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">01</span>
+          <span class="tier-name">Beginner</span>
+          <span class="tier-tag">new to the Word</span>
+        </div>
+        <ol>
+          <li>What did you notice about how Ahab and Jezebel related to each other?</li>
+          <li>Naboth lost his vineyard because he refused to give it up. When was the last time you held a "no" together as a household?</li>
+          <li>What's one thing about your marriage you've been afraid to bring into the open?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">02</span>
+          <span class="tier-name">Intermediate</span>
+          <span class="tier-tag">walking with God</span>
+        </div>
+        <ol>
+          <li>Ahab and Jezebel drifted toward Baal together. What cultural pull is your marriage quietly accommodating that you haven't named to each other yet?</li>
+          <li>Elijah was reminded he was not alone. Which faithful couples are around you, and are you walking with them or trying to do this in isolation?</li>
+          <li>What inheritance, conviction, or "no" is costing your household something right now, and is it worth it?</li>
+        </ol>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <span class="tier-num">03</span>
+          <span class="tier-name">Advanced</span>
+          <span class="tier-tag">leading others</span>
+        </div>
+        <ol>
+          <li>If your kids inherited the spiritual climate of your home exactly as it is, what would they inherit? Be specific.</li>
+          <li>Where in your leadership at work, church, or family are you Ahab passively complicit while the Jezebel of culture engineers the outcome?</li>
+          <li>Who are the seven thousand around you? Name them. How are you stewarding the covenant friendships that hold your marriage in place?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="fives">
+      <div class="fives-head">
+        <h2 class="fives-title">How the 5S Life reveals itself in 1 Kings 17–21</h2>
+        <span class="fives-sub">one text, all five</span>
+      </div>
+      <div class="fives-grid">
+        <div class="five-cell">
+          <div class="five-name">Surrendered</div>
+          <div class="five-text">Naboth surrenders his life before he surrenders the inheritance. Covenant is what you hold when it costs.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Surrounded</div>
+          <div class="five-text">Seven thousand have not bowed. Your marriage was never meant to be the only faithful household in the room.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Spirit-Led</div>
+          <div class="five-text">Ahab follows Jezebel's voice. The still small voice was always available. Which voice is leading your home?</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Self-Fed</div>
+          <div class="five-text">Both spouses in the Word daily protects the household from being told who you are by the culture.</div>
+        </div>
+        <div class="five-cell">
+          <div class="five-name">Sent</div>
+          <div class="five-text">God sends Elijah back to anoint kings. Your home is a staging ground for the next generation, not a fortress.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="assess">
+      <div class="assess-head">
+        <h2 class="assess-title">Leader · Group Health Check</h2>
+        <span class="assess-hint">share with your group coach this week</span>
+      </div>
+      <div class="assess-grid">
+        <div class="assess-cell">
+          <div class="label">Surrendered</div>
+          <div class="question">Are couples bringing real marriage to the table, or curated marriage?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Surrounded</div>
+          <div class="question">Are the couples in this group becoming real friends outside the meeting?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Spirit-Led</div>
+          <div class="question">Is the Spirit's voice welcome in this group, or are we afraid of awkward silence?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+        <div class="assess-cell">
+          <div class="label">Self-Fed</div>
+          <div class="question">Are both spouses in each couple reading their Bible, or just one of them?</div>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sheet-foot">
+      <span>Love Church · Self-Fed Group · v0.1</span>
+      <span class="submit">Pass this sheet to your small group coach</span>
+      <span>lovechurch.org</span>
+    </footer>
+  </article>
+
+</main>
+
+<script>
+  const tabs = document.querySelectorAll('.nav-tab');
+  const sheets = document.querySelectorAll('.sheet');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const order = ['valor', 'agape', 'mixed'];
+
+  function showSheet(id) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.target === id));
+    sheets.forEach(s => s.classList.toggle('active', s.id === id));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => showSheet(tab.dataset.target)));
+  prev.addEventListener('click', () => {
+    const current = document.querySelector('.sheet.active').id;
+    const i = order.indexOf(current);
+    showSheet(order[(i - 1 + order.length) % order.length]);
+  });
+  next.addEventListener('click', () => {
+    const current = document.querySelector('.sheet.active').id;
+    const i = order.indexOf(current);
+    showSheet(order[(i + 1) % order.length]);
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') prev.click();
+    if (e.key === 'ArrowRight') next.click();
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) < 50) return;
+    if (dx < 0) next.click(); else prev.click();
+  });
+</script>
+
+</body>
+</html>

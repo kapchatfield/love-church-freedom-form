@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-Fed Group Guide Pilot · Week of June 1, 2026 · Love Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=EB+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lc-ink: #151515;
+    --lc-cream: #EEE4D3;
+    --lc-paper: #F3F1E5;
+    --lc-taupe: #B5A090;
+    --lc-taupe-deep: #A39584;
+    --lc-pink-loud: #F0238D;
+    --lc-pink-soft: #F49DC3;
+    --lc-orange: #E27440;
+    --lc-yellow: #D9C44A;
+    --lc-blue: #557EA1;
+    --lc-green: #5E7A56;
+    --lc-gold: #C9A24A;
+    --lc-font-display: "Neue Haas Grotesk Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --lc-font-accent: "Apple Garamond", "EB Garamond", "Garamond", serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--lc-cream);
+    color: var(--lc-ink);
+    font-family: var(--lc-font-display);
+    font-weight: 400;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 64px 48px 96px;
+  }
+  /* Cover */
+  .cover {
+    border-bottom: 3px solid var(--lc-ink);
+    padding-bottom: 48px;
+    margin-bottom: 48px;
+  }
+  .pill {
+    display: inline-block;
+    padding: 8px 20px;
+    background: var(--lc-pink-loud);
+    color: var(--lc-cream);
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .cover-title {
+    font-weight: 900;
+    font-size: 88px;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .cover-sub {
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--lc-pink-loud);
+    margin: 0 0 8px;
+  }
+  .cover-meta {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--lc-ink);
+    opacity: 0.7;
+  }
+  /* Section base */
+  .section {
+    padding-top: 48px;
+    margin-top: 48px;
+    border-top: 1.5px solid var(--lc-ink);
+  }
+  .section-label {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lc-pink-loud);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0 0 32px;
+  }
+  h3 {
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 1.1;
+    margin: 32px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  h4 {
+    font-weight: 700;
+    font-size: 18px;
+    margin: 24px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p { margin: 0 0 16px; font-size: 18px; }
+  .lead {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--lc-pink-loud);
+    margin-bottom: 24px;
+  }
+  .italic {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 500;
+  }
+  blockquote {
+    border-left: 3px solid var(--lc-pink-loud);
+    padding: 4px 0 4px 24px;
+    margin: 24px 0;
+  }
+  .scripture-ref { font-weight: 700; }
+  .scripture-text {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 500;
+  }
+  /* Reading guide table */
+  .reading-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 16px;
+  }
+  .reading-table th {
+    text-align: left;
+    border-bottom: 1.5px solid var(--lc-ink);
+    padding: 12px 16px 12px 0;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .reading-table td {
+    border-bottom: 1px solid var(--lc-taupe);
+    padding: 14px 16px 14px 0;
+    vertical-align: top;
+  }
+  .reading-table tr:last-child td { border-bottom: none; }
+  .day { font-weight: 700; }
+  /* Group cards */
+  .group-block {
+    background: var(--lc-paper);
+    border: 1.5px solid var(--lc-ink);
+    border-radius: 8px;
+    padding: 40px;
+    margin: 32px 0;
+  }
+  .group-block.valor { border-color: var(--lc-ink); }
+  .group-block.agape { border-color: var(--lc-ink); background: #F2EBD8; }
+  .group-block.mixed { border-color: var(--lc-ink); background: var(--lc-paper); }
+  .group-label {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--lc-ink);
+    color: var(--lc-cream);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .group-label.valor { background: var(--lc-blue); }
+  .group-label.agape { background: var(--lc-pink-loud); }
+  .group-label.mixed { background: var(--lc-green); }
+  .lens {
+    font-family: var(--lc-font-accent);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--lc-ink);
+    margin: 0 0 24px;
+    border-bottom: 1px solid var(--lc-taupe);
+    padding-bottom: 16px;
+  }
+  /* Two-column leader/participant */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  @media (max-width: 760px) {
+    .two-col { grid-template-columns: 1fr; }
+    .cover-title { font-size: 56px; }
+    h2 { font-size: 36px; }
+    .page { padding: 40px 24px; }
+    .group-block { padding: 24px; }
+  }
+  .sub-card {
+    background: var(--lc-cream);
+    border: 1px solid var(--lc-ink);
+    padding: 24px;
+  }
+  .sub-card.dark {
+    background: var(--lc-ink);
+    color: var(--lc-cream);
+  }
+  .sub-card.dark .scripture-ref,
+  .sub-card.dark .scripture-text { color: var(--lc-cream); }
+  .sub-card h4 {
+    margin-top: 0;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--lc-pink-loud);
+  }
+  .sub-card ol, .sub-card ul { padding-left: 20px; margin: 12px 0; }
+  .sub-card li { font-size: 16px; margin-bottom: 10px; line-height: 1.45; }
+  .step-num {
+    display: inline-block;
+    background: var(--lc-pink-loud);
+    color: var(--lc-cream);
+    font-weight: 900;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    letter-spacing: 0.04em;
+  }
+  /* Evaluation */
+  .eval-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--lc-taupe);
+  }
+  @media (max-width: 760px) {
+    .eval-row { grid-template-columns: 1fr; gap: 8px; }
+  }
+  .eval-label {
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--lc-pink-loud);
+  }
+  .verdict {
+    background: var(--lc-ink);
+    color: var(--lc-cream);
+    padding: 40px;
+    margin-top: 32px;
+    border-radius: 8px;
+  }
+  .verdict h3 { color: var(--lc-cream); margin-top: 0; }
+  .verdict .lead { color: var(--lc-pink-soft); }
+  /* Footer */
+  .footer {
+    margin-top: 96px;
+    padding-top: 24px;
+    border-top: 1.5px solid var(--lc-ink);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .stat {
+    display: inline-block;
+    margin-right: 32px;
+  }
+  .stat-num {
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .note {
+    background: var(--lc-cream);
+    border: 1.5px dashed var(--lc-ink);
+    padding: 24px;
+    margin: 24px 0;
+    font-size: 16px;
+  }
+  ul.clean { list-style: none; padding-left: 0; }
+  ul.clean li {
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  ul.clean li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 12px;
+    height: 2px;
+    background: var(--lc-pink-loud);
+  }
+  .print-only { display: none; }
+  @media print {
+    .page { max-width: none; padding: 24px 32px; }
+    .section { page-break-inside: avoid; }
+    .group-block { page-break-before: always; }
+    .verdict { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <header class="cover">
+    <span class="pill">Self-Fed Group Pilot · 2026</span>
+    <h1 class="cover-title">Same<br>Passage.<br>Three<br>Tables.</h1>
+    <p class="cover-sub">Week of June 1–7, 2026 · Reading: 1 Kings 13 – 2 Kings 4</p>
+    <p class="cover-meta">Focal text for group: <strong>1 Kings 17–19</strong> · Author: Kap Chatfield · For: Mike O'Connell Jr., Adam Deidel, Denise Doxzon, Love Church Groups team</p>
+  </header>
+
+  <!-- WHY THIS DOC -->
+  <section class="section">
+    <p class="section-label">Pastoral note · why this exists</p>
+    <h2>The Experiment</h2>
+    <p class="lead">Can the Self-Fed reading guide produce a men-of-valor group, an agape-women group, and a married/mixed group at the same time without each one needing its own outside curriculum?</p>
+    <p>That's the hypothesis. The instinct under pressure is to buy a book. Curriculum is fast. Curriculum sells. But Love Church's secret sauce has always been a different sentence: <span class="italic">"Know God one day at a time in your own Bible."</span></p>
+    <p>So here's the test. One week of the 2026 reading guide. One focal passage. Three group tables. Each group reads the same text and walks into a different invitation. If it works under pastorally heavy material, it works.</p>
+    <div class="note">
+      <strong>How to read this document.</strong> This is a pilot. It's built to be deployed Monday June 1 through Sunday June 7 with three real groups. Each section has a leader sheet and a participant handout. The final section is my pastoral evaluation of where this approach is strong and where it could quietly fail over a year.
+    </div>
+  </section>
+
+  <!-- THE WEEK'S READING -->
+  <section class="section">
+    <p class="section-label">Step 01 · Study It</p>
+    <h2>The Week's Reading</h2>
+    <p>The whole house reads this together, daily, in their own Bibles. Group leaders are not assigning new homework. The group meeting is where the week's reading gets discussed.</p>
+    <table class="reading-table">
+      <thead>
+        <tr>
+          <th style="width:100px;">Day</th>
+          <th style="width:240px;">Primary</th>
+          <th>Secondary</th>
+          <th>Pay attention to</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="day">M 6/01</td><td>1 Kings 13–14</td><td>Proverbs 1</td><td>The disobedient prophet. Jeroboam's household judged.</td></tr>
+        <tr><td class="day">Tu 6/02</td><td>1 Kings 15–16</td><td>Proverbs 2</td><td>The kings stack up. Ahab takes the throne and marries Jezebel.</td></tr>
+        <tr><td class="day">W 6/03</td><td>1 Kings 17–18</td><td>Proverbs 3</td><td><strong>Elijah at Cherith and Zarephath. Mt. Carmel showdown.</strong></td></tr>
+        <tr><td class="day">Th 6/04</td><td>1 Kings 19–20</td><td>Proverbs 4</td><td><strong>Elijah collapses at Horeb. The still small voice.</strong></td></tr>
+        <tr><td class="day">F 6/05</td><td>1 Kings 21–22</td><td>Proverbs 5</td><td>Naboth's vineyard. Jezebel. Ahab's death. Micaiah the lone prophet.</td></tr>
+        <tr><td class="day">Sa 6/06</td><td>2 Kings 1–2</td><td>Proverbs 6</td><td>Elijah taken up. Elisha receives the double portion.</td></tr>
+        <tr><td class="day">Su 6/07</td><td>2 Kings 3–4</td><td>Proverbs 7</td><td>The widow's oil. The Shunammite. God provides in the household.</td></tr>
+      </tbody>
+    </table>
+    <p>The arc of the week: a divided kingdom drifting into Baal worship, the prophets God raises in the middle of it, and the cost of a faithful "no" inside an unfaithful regime.</p>
+  </section>
+
+  <!-- FOCAL PASSAGE -->
+  <section class="section">
+    <p class="section-label">Step 02 · Discuss It</p>
+    <h2>The Focal Passage</h2>
+    <p class="lead">For group night, all three tables zoom in on 1 Kings 17–19. Three chapters. One man's rise, fall, and recovery. Every demographic gets a lens that the text itself already provides.</p>
+    <h3>The Arc in Five Beats</h3>
+    <ul class="clean">
+      <li><strong>Beat 1 · Hiddenness</strong> (1 Kings 17:1–7). Elijah declares drought, then God hides him by a brook. Ravens feed him. He's formed in obscurity before he stands in public.</li>
+      <li><strong>Beat 2 · The widow</strong> (1 Kings 17:8–24). God provides for Elijah through the most powerless person in the region. A Gentile widow with one last meal. Her son dies. Elijah raises him.</li>
+      <li><strong>Beat 3 · The showdown</strong> (1 Kings 18). Mt. Carmel. 450 prophets of Baal. Fire falls. The people fall on their faces. <span class="italic">"The LORD, He is God!"</span></li>
+      <li><strong>Beat 4 · The collapse</strong> (1 Kings 19:1–9). Jezebel sends one message and Elijah runs for his life. Suicidal under a broom tree. Sleep. Bread from an angel. Forty days to Horeb.</li>
+      <li><strong>Beat 5 · The still small voice</strong> (1 Kings 19:10–18). Not in the wind. Not in the earthquake. Not in the fire. In a low whisper. God recommissions, and reminds him there are seven thousand others who haven't bowed.</li>
+    </ul>
+    <p>Most curriculum stops at beat three. The 5S Life can't.</p>
+  </section>
+
+  <!-- VALOR GROUP -->
+  <section class="section">
+    <div class="group-block valor">
+      <span class="group-label valor">Valor · Men's Group</span>
+      <h2>Men of Valor</h2>
+      <p class="lens">"What is a man of valor on the morning <em>after</em> the victory?"</p>
+      <p>Elijah is the dream men's curriculum text. Bold. Public. Outnumbered. Fire from heaven. But the same chapter that ends with a Carmel victory ends the next morning with him asking God to take his life. Valor that can't survive the day after isn't valor. It's adrenaline.</p>
+
+      <div class="two-col">
+
+        <div class="sub-card dark">
+          <h4>Leader Sheet · Valor</h4>
+          <p><strong>Time:</strong> 75–90 min · <strong>Size:</strong> 8–12 men · <strong>Setting:</strong> Living room, table, or backyard. No screens.</p>
+
+          <p><span class="step-num">1</span><strong>Open · 5 min</strong><br>"Where did the Word meet you this week? One sentence." Go around the circle. Don't fix anything. Just hear it.</p>
+
+          <p><span class="step-num">2</span><strong>Read · 10 min</strong><br>Read <span class="scripture-ref">1 Kings 18:20–39</span> aloud (Carmel). Then read <span class="scripture-ref">1 Kings 19:1–9</span> aloud (the collapse). Same voice if possible. The contrast is the lesson.</p>
+
+          <p><span class="step-num">3</span><strong>Discuss · 40–50 min</strong><br>Use the four questions below. Push past the first hand up. Most men give the answer they think a Christian man should give before they give the real one. Wait for the second answer.</p>
+
+          <p><span class="step-num">4</span><strong>Apply · 10 min</strong><br>The Sent commitment on the participant sheet. Each man names one. Don't accept "be a better husband." Press for specific, observable, this-week.</p>
+
+          <p><span class="step-num">5</span><strong>Pray · 10 min</strong><br>Two-by-two. Each man prays the still small voice over the man next to him. Use the prayer prompt on the participant sheet.</p>
+
+          <h4 style="margin-top:24px;">Leader watch-outs</h4>
+          <ul>
+            <li><strong>The hero trap.</strong> Don't let the room idolize Carmel. Half your men live closer to Horeb than to Carmel right now.</li>
+            <li><strong>The performance reflex.</strong> Some men will perform vulnerability. Read the room. Closeness is not the same as honesty.</li>
+            <li><strong>The Jezebel reduction.</strong> Don't let the group make Jezebel the villain of male weakness. The threat in the text is real. Men who blame their wives for spiritual cowardice don't get pastored, they get challenged.</li>
+            <li><strong>The fix.</strong> Resist the urge to fix despair when it surfaces. Bread, water, sleep, and the voice of God came before the recommission. In that order.</li>
+          </ul>
+
+          <h4 style="margin-top:24px;">If you have a struggling member</h4>
+          <p>If a man in the group is in the Horeb cave right now, the table is for him. Don't isolate him after, but do follow up by Wednesday with a one-on-one. Loop in Casey or me only if there's a safety concern.</p>
+        </div>
+
+        <div class="sub-card">
+          <h4>Participant Handout · Valor</h4>
+          <p><strong>Welcome.</strong> Tonight we're sitting with one of the most quoted men in the Bible and one of the least quoted chapters about him.</p>
+
+          <blockquote>
+            <span class="scripture-ref">1 Kings 18:37–39 (NKJV)</span><br>
+            <span class="scripture-text">"Hear me, O LORD, hear me, that this people may know that You are the LORD God, and that You have turned their hearts back to You again." Then the fire of the LORD fell and consumed the burnt sacrifice... Now when all the people saw it, they fell on their faces; and they said, "The LORD, He is God! The LORD, He is God!"</span>
+          </blockquote>
+          <blockquote>
+            <span class="scripture-ref">1 Kings 19:4 (NKJV)</span><br>
+            <span class="scripture-text">"But he himself went a day's journey into the wilderness, and came and sat down under a broom tree. And he prayed that he might die, and said, 'It is enough! Now, LORD, take my life, for I am no better than my fathers!'"</span>
+          </blockquote>
+
+          <h4>Four questions</h4>
+          <ol>
+            <li>Carmel is the version of valor men want. Horeb is the version we don't post about. Which one is closer to your week? Be honest.</li>
+            <li>What did Elijah do in the cave that you don't do? Notice the verbs in 1 Kings 19:5–9. What's the difference between his crash and your crash?</li>
+            <li>God didn't send Elijah back into ministry in the wind, the earthquake, or the fire. He sent him back through a whisper and a reminder that seven thousand others were standing. Where in your life have you been listening for the wind when God is whispering?</li>
+            <li>What does a man of valor do when the public win is over and no one is watching? Name what your private faithfulness looks like this week.</li>
+          </ol>
+
+          <h4>The Sent commitment</h4>
+          <p>By next group, I will:</p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+
+          <h4>Prayer (two-by-two)</h4>
+          <p class="italic">"Father, where this brother has only known you in the fire, teach him your voice in the whisper. Where he is in the cave, send bread and water and a friend, and then send him back. In Jesus' name."</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AGAPE GROUP -->
+  <section class="section">
+    <div class="group-block agape">
+      <span class="group-label agape">Agape · Women's Group</span>
+      <h2>Women of Agape</h2>
+      <p class="lens">"What is a woman of agape when she has no power, no platform, and one bag of flour left?"</p>
+      <p>Two women anchor this passage. One is named: Jezebel. One is not: the widow of Zarephath. Jezebel has every kind of power. The widow has one meal. By the end of the chapter the widow is the one whose son is raised and whose flour does not run out. Agape is not measured by leverage. It's measured by what your hand opens to release in a famine.</p>
+
+      <div class="two-col">
+
+        <div class="sub-card dark">
+          <h4>Leader Sheet · Agape</h4>
+          <p><strong>Time:</strong> 75–90 min · <strong>Size:</strong> 6–10 women · <strong>Setting:</strong> Around a table. Food helps. Mirrors the widow's hospitality.</p>
+
+          <p><span class="step-num">1</span><strong>Open · 5 min</strong><br>"Where did the Word meet you this week? One sentence." Resist the temptation to start with surface check-ins. Start in the Word.</p>
+
+          <p><span class="step-num">2</span><strong>Read · 10 min</strong><br>Read <span class="scripture-ref">1 Kings 17:8–24</span> aloud (Zarephath widow). Then briefly recap <span class="scripture-ref">1 Kings 21:1–16</span> (Jezebel and Naboth). The contrast is the lesson.</p>
+
+          <p><span class="step-num">3</span><strong>Discuss · 40–50 min</strong><br>Use the four questions below. Two are about the unnamed widow. One is about Jezebel. One is about the daily quiet life of an agape woman in a culture pulling toward Jezebel's script.</p>
+
+          <p><span class="step-num">4</span><strong>Apply · 10 min</strong><br>The Sent commitment on the participant sheet. Press past "be more grateful." Look for one concrete release this week.</p>
+
+          <p><span class="step-num">5</span><strong>Pray · 10 min</strong><br>One woman prays for the woman on her right. Use the prayer prompt. Hands open, palms up, posture of release.</p>
+
+          <h4 style="margin-top:24px;">Leader watch-outs</h4>
+          <ul>
+            <li><strong>The trauma reflex.</strong> The widow's story includes her son dying. Some women in the room are carrying loss, miscarriage, or estrangement. Don't move past her grief quickly. The text doesn't.</li>
+            <li><strong>The shame loop.</strong> Don't let the group turn this into "I'm not generous enough." That's not agape, that's striving. Agape is the open hand of someone who knows God will not run dry.</li>
+            <li><strong>The Jezebel boomerang.</strong> Don't let the group use Jezebel as a punchline for women they dislike. The threat she models is real. Be sober.</li>
+            <li><strong>The platform question.</strong> Many women in this room feel invisible. The widow is the proof that the unseen are not unseen by God. Don't rush past this.</li>
+          </ul>
+
+          <h4 style="margin-top:24px;">If you have a struggling member</h4>
+          <p>If a woman shares about scarcity, anxiety, or marital strain, do not fix. Witness, then follow up by Thursday with a text. If there is danger or abuse mentioned, loop in Denise that night.</p>
+        </div>
+
+        <div class="sub-card">
+          <h4>Participant Handout · Agape</h4>
+          <p><strong>Welcome.</strong> Tonight, two women in the same kingdom. One had everything. One had nothing. Only one of them shows up in the line of provision God uses to feed His prophet.</p>
+
+          <blockquote>
+            <span class="scripture-ref">1 Kings 17:12–14 (NKJV)</span><br>
+            <span class="scripture-text">"So she said, 'As the LORD your God lives, I do not have bread, only a handful of flour in a bin, and a little oil in a jar; and see, I am gathering a couple of sticks that I may go in and prepare it for myself and my son, that we may eat it, and die.' And Elijah said to her, 'Do not fear; go and do as you have said, but make me a small cake from it first... For thus says the LORD God of Israel: "The bin of flour shall not be used up, nor shall the jar of oil run dry, until the day the LORD sends rain on the earth."'"</span>
+          </blockquote>
+          <blockquote>
+            <span class="scripture-ref">1 Kings 21:7 (NKJV)</span><br>
+            <span class="scripture-text">"Then Jezebel his wife said to him, 'You now exercise authority over Israel! Arise, eat food, and let your heart be cheerful; I will give you the vineyard of Naboth the Jezreelite.'"</span>
+          </blockquote>
+
+          <h4>Four questions</h4>
+          <ol>
+            <li>The widow is never named. She is the proof that no faithful woman is invisible to God. Where do you feel unnamed right now, and what would change if you really believed the bin of flour wouldn't run out?</li>
+            <li>The widow was asked to give first. To feed the prophet before she fed herself or her son. That's the order. What is God asking you to release first this week, before you are sure you have enough?</li>
+            <li>Jezebel is the inverse. She uses her position to take. The widow uses her last meal to give. In your home, friendships, marriage, or work, which posture is winning right now?</li>
+            <li>The Shunammite woman in 2 Kings 4 mirrors this widow. She makes room for the prophet without being asked. What room could you make this week that no one is asking for?</li>
+          </ol>
+
+          <h4>The Sent commitment</h4>
+          <p>By next group, I will:</p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+
+          <h4>Prayer (hands open)</h4>
+          <p class="italic">"Father, the bin of flour will not be used up, and the jar of oil will not run dry. Where my sister has been hoarding, give her open hands. Where she has felt unseen, name her. Make her a woman who feeds prophets in a famine. In Jesus' name."</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MIXED / MARRIED -->
+  <section class="section">
+    <div class="group-block mixed">
+      <span class="group-label mixed">Marriage · Mixed/Married Group</span>
+      <h2>Covenant Under Pressure</h2>
+      <p class="lens">"What does a covenant marriage do when the culture pulls one or both of you toward Baal?"</p>
+      <p>This passage has two marriages. One is the most toxic marriage in the Old Testament: Ahab and Jezebel, who pull each other into deeper death. The other is implied: Naboth and his household, whose covenant faithfulness to the inheritance of the fathers costs him his life. Couples don't drift to neutral. They drift toward one of these two tables.</p>
+
+      <div class="two-col">
+
+        <div class="sub-card dark">
+          <h4>Leader Sheet · Mixed/Married</h4>
+          <p><strong>Time:</strong> 90 min · <strong>Size:</strong> 4–6 couples · <strong>Setting:</strong> Home with seating that lets couples sit together but allows the group to be a group. Avoid lecture posture.</p>
+
+          <p><span class="step-num">1</span><strong>Open · 10 min</strong><br>"Where did the Word meet either of you this week? One sentence per person." Both spouses speak. This sets the tone that this group is not a place where one spouse carries the spiritual weight.</p>
+
+          <p><span class="step-num">2</span><strong>Read · 10 min</strong><br>Read <span class="scripture-ref">1 Kings 21:1–16</span> aloud (Naboth, Ahab, Jezebel). Then read <span class="scripture-ref">1 Kings 19:9–18</span> aloud (the still small voice). Each text shows a household under pressure.</p>
+
+          <p><span class="step-num">3</span><strong>Discuss · 50 min</strong><br>Four questions. Two are answered first individually, then shared with the spouse, then opened to the group. This protects honesty inside the marriage.</p>
+
+          <p><span class="step-num">4</span><strong>Apply · 10 min</strong><br>One covenant practice per couple this week. Press for joint, specific, observable.</p>
+
+          <p><span class="step-num">5</span><strong>Pray · 10 min</strong><br>Couples pray for each other first. Then one couple is prayed over by the rest. Rotate that "prayed over" couple weekly.</p>
+
+          <h4 style="margin-top:24px;">Leader watch-outs</h4>
+          <ul>
+            <li><strong>The performance couple.</strong> Every group has the couple that is "fine." They are not fine. Don't expose them, but do create on-ramps in your questions so honesty is possible.</li>
+            <li><strong>The dominant spouse.</strong> Watch for one spouse speaking for both. Gently redirect.</li>
+            <li><strong>The Jezebel slur.</strong> Don't let "Jezebel" become shorthand for a wife who challenges her husband. Jezebel's sin is idolatry that pulls the household away from God, not strength of personality.</li>
+            <li><strong>The Naboth question.</strong> Some couples in your group are losing real ground in their kids' culture, careers, or extended families because of faithfulness. Honor that. Don't promise outcomes the text doesn't promise.</li>
+          </ul>
+
+          <h4 style="margin-top:24px;">If a marriage is in crisis</h4>
+          <p>If serious conflict, addiction, infidelity, or abuse surfaces, do not pastor it from the table. Affirm courage to name it, end the meeting with prayer, and connect them with Mike or the marriage ministry within 24 hours.</p>
+        </div>
+
+        <div class="sub-card">
+          <h4>Participant Handout · Mixed/Married</h4>
+          <p><strong>Welcome.</strong> Tonight you're sitting at a table with the marriage you brought through your front door this week. Not the curated one. The real one.</p>
+
+          <blockquote>
+            <span class="scripture-ref">1 Kings 21:3 (NKJV)</span><br>
+            <span class="scripture-text">"But Naboth said to Ahab, 'The LORD forbid that I should give the inheritance of my fathers to you!'"</span>
+          </blockquote>
+          <blockquote>
+            <span class="scripture-ref">1 Kings 21:25 (NKJV)</span><br>
+            <span class="scripture-text">"But there was no one like Ahab who sold himself to do wickedness in the sight of the LORD, because Jezebel his wife stirred him up."</span>
+          </blockquote>
+          <blockquote>
+            <span class="scripture-ref">1 Kings 19:18 (NKJV)</span><br>
+            <span class="scripture-text">"Yet I have reserved seven thousand in Israel, all whose knees have not bowed to Baal, and every mouth that has not kissed him."</span>
+          </blockquote>
+
+          <h4>Four questions</h4>
+          <ol>
+            <li><strong>Answer privately, then share with your spouse.</strong> Where in our marriage are we drifting toward each other in good ways? Where are we drifting away?</li>
+            <li>Ahab and Jezebel pulled each other deeper into Baal. What's one cultural pull our marriage is quietly bowing to that we haven't named to each other yet?</li>
+            <li>Naboth lost his vineyard because he wouldn't give up his inheritance. What inheritance, conviction, or "no" is your household holding right now, even when it costs you?</li>
+            <li>God's encouragement to Elijah was "you are not the only one." Who are the other faithful couples around us? Are we walking with them, or are we trying to do this alone?</li>
+          </ol>
+
+          <h4>The covenant practice</h4>
+          <p>This week, our household will:</p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+          <p style="border-bottom:1px solid var(--lc-ink); height:24px;"></p>
+
+          <h4>Prayer (couple to couple)</h4>
+          <p class="italic">"Father, where our marriage has been quietly bowing, give us the still small voice. Where we have been alone, give us seven thousand. Where we have been Naboth, give us courage. Where we have been Ahab and Jezebel, give us repentance. In Jesus' name."</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PASTORAL EVALUATION -->
+  <section class="section">
+    <p class="section-label">Step 04 · Apply It</p>
+    <h2>Pastoral Evaluation</h2>
+    <p class="lead">My honest read on whether this approach disciples each audience over a year, not just one good night.</p>
+
+    <h3>What's strong</h3>
+    <div class="eval-row">
+      <div class="eval-label">Same Bible, three tables</div>
+      <div>Every group is reading the same passage as the rest of the house and listening to the same sermon on Sunday. That's the 5S Life working as designed. A man at his Valor table on Tuesday and his wife at her Agape table on Thursday show up to Sunday with shared vocabulary instead of two different curricula.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">No outsourcing the formation</div>
+      <div>The lens is provided by the text itself, not bolted on from outside. Elijah on Carmel and at Horeb. The widow at Zarephath. Jezebel and Naboth. The Bible is doing the discipling. We are facilitating.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Built-in scale</div>
+      <div>If this works, every week of the reading guide can produce three group guides. Year one of the rhythm yields fifty-two weeks of Self-Fed-native curriculum across three demographics. That's a library, not a campaign.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Leadership pipeline</div>
+      <div>Group leaders develop by facilitating the Word, not by mastering a book. The skill we're building in leaders is the most durable one we could build: how to open a Bible with people and stay there.</div>
+    </div>
+
+    <h3>What's weak (and the counterarguments)</h3>
+    <div class="eval-row">
+      <div class="eval-label">Some weeks are thin</div>
+      <div>This week is rich. Numbers 7 in March is not. Some passages won't yield three obvious demographic-specific lenses. We need a rubric for when to converge all three groups onto the same questions vs. when to fork the lenses.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">The "biblical manhood/womanhood book" pull</div>
+      <div>The reason men's curriculum sells is that books like <span class="italic">Wild at Heart</span> or <span class="italic">Disciplines of a Godly Man</span> answer questions men are already asking. Our approach asks men to bring their questions to the text instead. That's harder up front. It pays better over time.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Leader load</div>
+      <div>This is harder to facilitate than a book club. The leader has to be a self-feeder themselves. We need a Wednesday leader huddle (15 min, online) per group track to keep them sharp.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Topical seasons still matter</div>
+      <div>This is not an argument against ever using outside curriculum. A six-week premarital book or a recovery curriculum still belongs. The argument is that the default rhythm for Valor, Agape, and Mixed/Married groups should be Self-Fed-driven, and topical books should be the exception, not the operating system.</div>
+    </div>
+
+    <h3>One-year discipleship verdict per audience</h3>
+    <div class="eval-row">
+      <div class="eval-label">Valor</div>
+      <div><strong>Strong.</strong> The Bible's portrait of men is more honest than any modern men's book. The reading guide naturally produces a year of David, Elijah, Daniel, Paul, Peter, the disciples. The Valor table just has to ask one consistent question of every text: <span class="italic">"What does this passage say about how a faithful man stands when no one is watching?"</span> Over fifty-two weeks, that question forms men of valor in a way no single book can.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Agape</div>
+      <div><strong>Strong, with care needed.</strong> The reading guide does include long stretches with fewer named women. The Agape lens needs to be willing to ask "what does this text say to a woman of agape" even when women aren't the on-page subject. With good leader training, this becomes a year of formation that's both robustly biblical and not reduced to wifely-virtue tropes. Without it, the lens risks becoming thin during the slower weeks.</div>
+    </div>
+    <div class="eval-row">
+      <div class="eval-label">Mixed/Married</div>
+      <div><strong>Strongest test of the model.</strong> Married groups already meet to be edified together, not to receive demographic-specific teaching. The reading guide is the natural curriculum. Over a year, couples journey through the whole Bible together with weekly mid-course discussion. That is the dream. The risk is that married groups become catch-all groups where neither spouse gets the specific challenge they'd get in a Valor or Agape table. Recommendation: married groups operate as the primary discipleship vehicle for the couple, and Valor/Agape are additive, not parallel.</div>
+    </div>
+
+    <h3>What I'd test before going church-wide</h3>
+    <ul class="clean">
+      <li><strong>One quarter of pilot data.</strong> Run this format with one Valor, one Agape, and one Mixed/Married pilot group, June through August, same reading guide week each Sunday-to-Saturday. Survey leaders weekly: did the guide produce a meaningful discussion, did the lens hold up, where did it break.</li>
+      <li><strong>Leader huddle rhythm.</strong> One 20-minute Zoom per track, Wednesdays. Adam or Denise or Mike walks the leaders through the focal passage so the table is sharper that night.</li>
+      <li><strong>One thin week stress test.</strong> Deliberately pick a thin week (e.g., Numbers, Chronicles genealogies) and see if the three-lens model holds or if it should converge.</li>
+      <li><strong>Sunday alignment.</strong> Ask Mike to consider preaching one Encounter per month directly from the previous week's reading. That closes the Study It → Discuss It → Hear It → Apply It loop with weight.</li>
+    </ul>
+
+    <div class="verdict">
+      <h3>Verdict</h3>
+      <p class="lead">The hypothesis holds. Build it.</p>
+      <p>Self-Fed-driven group curriculum is not just possible, it's the most consistent way to disciple Valor, Agape, and Mixed/Married audiences inside the 5S Life over a year. The math is simple: every adult in the house ends up reading the same Bible together while their table refines what that Bible is forming in them specifically.</p>
+      <p>The alternative is what most churches do, which is run three different curriculums in three different rooms, with three different vocabularies, and pretend it's one church. That's not the 5S Life. That's a campus of clubs.</p>
+      <p>Pilot it for one quarter. If it produces what I think it will, we're not buying another book this year.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Love Church · Self-Fed Group Guide Pilot · v0.1</span>
+    <span>2026</span>
+    <span>lovechurch.org</span>
+  </footer>
+
+</div>
+</body>
+</html>
